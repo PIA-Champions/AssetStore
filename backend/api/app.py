@@ -1,8 +1,7 @@
-from chalice import Chalice
-from chalice import IAMAuthorizer
+from chalice import Chalice, AuthResponse
 from DAO import user_dao
+
 app = Chalice(app_name='api')
-authorizer = IAMAuthorizer()
 
 @app.route('/')
 def index():
@@ -29,30 +28,30 @@ def login():
     dao = user_dao.User_DAO('Teste_user')
     body = app.current_request.json_body
     response = dao.user_login(body['name'], body['password'])
-    print(response)
+
+    jwt_token = dao.get_jwt_token(body['name'], body['password'])
+    
+    return {'Response': response , 'Token': jwt_token}
+
+
+@app.authorizer()
+def jwt_auth(auth_request):
+    dao = user_dao.User_DAO('Teste_user')
+    token = auth_request.token
+    decoded = dao.decode_jwt_token(token)
+    print(decoded)
+    return AuthResponse(routes=['*'], principal_id=decoded['sub'])
+
+"""
+    if token is None:
+        raise CognitoUnauthorizedError(auth_request.token)
+    return AuthResponse(routes=['*'], principal_id=token,
+                        context={'user': token})
+"""
+
+def get_authorized_username(current_request):
+    return current_request.context['authorizer']['principalId']
+
+@app.route('/assets', methods=['GET'], authorizer=jwt_auth)
+def get_assets():
     return {'Bem vindo a aplicação': 'GameAssetsStore'}
-
-@app.route('/iam-auth', methods=['GET'], authorizer=authorizer)
-def authenticated():
-    return {"success": True}
-
-
-# The view function above will return {"hello": "world"}
-# whenever you make an HTTP GET request to '/'.
-#
-# Here are a few more examples:
-#
-# @app.route('/hello/{name}')
-# def hello_name(name):
-#    # '/hello/james' -> {"hello": "james"}
-#    return {'hello': name}
-#
-# @app.route('/users', methods=['POST'])
-# def create_user():
-#     # This is the JSON body the user sent in their POST request.
-#     user_as_json = app.current_request.json_body
-#     # We'll echo the json body back to the user in a 'user' key.
-#     return {'user': user_as_json}
-#
-# See the README documentation for more examples.
-#
