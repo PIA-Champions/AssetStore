@@ -4,6 +4,9 @@ from util import data_util
 import hashlib
 import os
 import hmac
+import jwt
+import datetime
+import uuid
 
 # User_DAO Manager User Crud operations.
 class User_DAO:
@@ -190,3 +193,30 @@ class User_DAO:
                 return return_values.USER_NOT_FOUND
         except Exception as e:
             return str(e)
+
+    def get_jwt_token(self,username, password):
+
+        user_id = data_util.create_hash(username)
+
+        db_record = self.read_user(user_id)
+
+        actual = hashlib.pbkdf2_hmac(db_record['hash']['B'].decode('utf-8'), password.encode('utf-8'), db_record['salt']['B'], int(db_record['rounds']['N']))
+
+        expected = db_record['hashed']['B']
+
+        if hmac.compare_digest(actual, expected):
+            now = datetime.datetime.utcnow()
+            print(type(now))
+            unique_id = str(uuid.uuid4())
+            payload = {
+                'sub': username,
+                'iat': now,
+                'nbf': now,
+                'jti': unique_id,
+            }
+            return jwt.encode(payload, 'secret', algorithm='HS256')
+        return return_values.INVALID_USER_OR_PASSWORD
+
+    def decode_jwt_token(self,token):
+        print(type(token))
+        return jwt.decode(token, 'secret', algorithms=['HS256'])
