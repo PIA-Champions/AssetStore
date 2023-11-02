@@ -10,7 +10,7 @@ import jwt
 import datetime
 import uuid
 
-class UserDAO(base_dao.BaseDAO):
+class User_DAO(base_dao.BaseDAO):
     def __init__(self,table_name):
         super().__init__(table_name)
 
