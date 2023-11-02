@@ -93,7 +93,6 @@ class User_DAO:
                 TableName = self.table_name,
                 Item = item
             )
-            return return_values.SUCCESS
         except Exception as e:
             return str(e)
         return id

@@ -1,3 +1,6 @@
 boto3
 chalice
 pytest
+PyJWT
+datetime
+uuid
