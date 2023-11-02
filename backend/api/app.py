@@ -11,7 +11,7 @@ def index():
 @app.route('/user/create', methods=['POST'])
 def user_create_table():
     dao = user_dao.User_DAO('Teste_user')
-    response = dao.create_user_table()
+    response = dao.create_table()
     print(response)
     return {'Bem vindo a aplicação': 'GameAssetsStore'}
 
@@ -19,7 +19,7 @@ def user_create_table():
 def user_register():
     dao = user_dao.User_DAO('Teste_user')
     body = app.current_request.json_body
-    response = dao.create_user(body)
+    response = dao.create_item(body)
     print(response)
     return {'Response': response}
 

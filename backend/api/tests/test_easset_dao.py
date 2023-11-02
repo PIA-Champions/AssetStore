@@ -1,11 +1,11 @@
 import pytest
-from DAO import example_asset_dao as dao
+from DAO import asset_dao as dao
 from util import data_util
 from definitions import return_values
 import boto3
 import time
 
-class TestExampleAssetDAO:
+class TestAssetDAO:
     _SLEEP = 10
     _asset_table_name = "TestAssetTable"
     _dao = None
@@ -53,7 +53,7 @@ class TestExampleAssetDAO:
     
     #asset_DAO must create a table that should be accessible by boto3
     def setup_class(self):
-        self._dao = dao.ExampleAssetDAO(self._asset_table_name)
+        self._dao = dao.Asset_DAO(self._asset_table_name)
         print('\n[[Entering setup_class]]\n')
         ret_value = self._dao.create_table()
         print('create_asset_table: '+ ret_value)

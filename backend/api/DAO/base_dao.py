@@ -128,6 +128,8 @@ class BaseDAO:
         if not self.validate_item(item_param):
             return return_values.INVALID_INPUT_DATA
         id = self.create_item_id(item_param)
+        if not self.read_item(id) == return_values.ITEM_NOT_FOUND:
+            return return_values.ITEM_ALREADY_EXISTS
         item = self.format_item_for_writing(id,item_param)
         try:
             self.db_instance.client.put_item(
