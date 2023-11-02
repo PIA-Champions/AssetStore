@@ -3,6 +3,10 @@ from definitions import return_values
 from util import data_util
 from DAO import update_expression
 
+# Base class for DAO (Data Access Object). 
+# Inherit from this class to implement 
+# specific DynamoDB table access objects.
+
 class DAO:
     field_names = [] #Stores the table field names
                      
