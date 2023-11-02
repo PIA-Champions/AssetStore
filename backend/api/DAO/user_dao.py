@@ -34,7 +34,6 @@ class User_DAO(base_dao.BaseDAO):
 
     #[IMPLEMENTATION]
     # Format item for writing operations 
-    #Must be implemented by derivative class
     def format_item_for_writing(self,item_id,item_param):
         password_fields = self.encode_password(item_param['password'])
         item = {
@@ -43,7 +42,7 @@ class User_DAO(base_dao.BaseDAO):
             'password':{'S':item_param['password']},
             'hash':{'B':password_fields['hash']},
             'salt':{'B':password_fields['salt']},
-            'rounds':{'N':password_fields['rounds']},
+            'rounds':{'N':str(password_fields['rounds'])},
             'hashed':{'B':password_fields['hashed']}
         }
         return item
@@ -120,7 +119,6 @@ class User_DAO(base_dao.BaseDAO):
 
         if hmac.compare_digest(actual, expected):
             now = datetime.datetime.utcnow()
-            print(type(now))
             unique_id = str(uuid.uuid4())
             payload = {
                 'sub': username,
@@ -132,6 +130,5 @@ class User_DAO(base_dao.BaseDAO):
         return return_values.INVALID_USER_OR_PASSWORD
 
     def decode_jwt_token(self,token):
-        print(type(token))
         return jwt.decode(token, 'secret', algorithms=['HS256'])
     
