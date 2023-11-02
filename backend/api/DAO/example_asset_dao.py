@@ -17,7 +17,7 @@ class ExampleAssetDAO(base_dao.BaseDAO):
     #[IMPLEMENTATION]
     # Format item for writing operations 
     #Must be implemented by derivative class
-    def format_new_item(self,item_id,item_param):
+    def format_item_for_writing(self,item_id,item_param):
         item = {
             'id':{'S':item_id},
             'name':{'S':item_param['name']},

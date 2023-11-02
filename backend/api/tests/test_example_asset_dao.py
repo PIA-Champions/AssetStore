@@ -72,10 +72,9 @@ class TestExampleAssetDAO:
         time.sleep(self._SLEEP)
         response = self._get_table_item(id)
         print(response)
-        response_item = response['Item']
-        assert response_item["name"] == asset_param["name"],f'Error testing created asset. name diverges'
-        assert response_item["description"] == asset_param["description"],f'Error testing created asset. description diverges'
-        assert response_item["url"] == asset_param["url"],f'Error testing created asset. url diverges'
+        assert response["name"] == asset_param["name"],f'Error testing created asset. name diverges'
+        assert response["description"] == asset_param["description"],f'Error testing created asset. description diverges'
+        assert response["url"] == asset_param["url"],f'Error testing created asset. url diverges'
     
     #asset_DAO must read an existing asset
     def test_read_asset(self):

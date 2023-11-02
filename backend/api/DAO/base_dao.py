@@ -2,6 +2,7 @@ from database_client import dynamo
 from definitions import return_values
 from util import data_util
 from DAO import update_expression
+import time
 
 # Base class for DAO (Data Access Object). 
 # Inherit from this class to implement 
@@ -99,6 +100,23 @@ class BaseDAO:
             return str(e)
         return dynamo.wait_table_creation(self.table_name)
     
+    #Wait for an iten to exist with given values
+    #Useful for checking update operation
+    #returns True or False
+    def wait_item_status(self, item_id, expected_values):
+        max_retries = 10  
+        retries = 0
+        while retries < max_retries:
+            item = self.db_instance.client.get_item(TableName=self.table_name, Key={"id": {"S": item_id}})
+            if 'Item' in item:
+                mapped_values = self.format_item_from_reading(item)
+                if mapped_values == expected_values:
+                    return True 
+            time.sleep(5)
+            retries += 1
+        return False
+
+
     #Create item 
     # return values:
     # TABLE_NOT_FOUND
@@ -117,8 +135,13 @@ class BaseDAO:
                 Item = item
             )
         except Exception as e:
+            error = str(e)
+            print(error)
             return str(e)
-        return id
+        if self.wait_item_status(id,item_param):
+            return id
+        else:
+            return return_values.ERROR + ": Writing not successfull"
         
     # Read an item 
     # return values:
@@ -142,22 +165,6 @@ class BaseDAO:
         except Exception as e:
             return str(e)
     
-    #Wait for an iten to exist with given values
-    #Useful for checking update operation
-    #returns True or False
-    def wait_item_status(self, item_id, expected_values):
-        max_retries = 10  
-        retries = 0
-        while retries < max_retries:
-            item = self.db_instance.client.get_item(TableName=self.table_name, Key={"id": {"S": item_id}})
-            if 'Item' in item:
-                mapped_values = self.format_item_for_writing(item_id,item)
-                if mapped_values == expected_values:
-                    return True 
-            time.sleep(5)
-            retries += 1
-        return False
-
     # Update  item 
     # return values:
     # TABLE_NOT_FOUND
