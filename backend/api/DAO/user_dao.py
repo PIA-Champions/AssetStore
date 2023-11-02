@@ -50,7 +50,6 @@ class UserDAO(base_dao.BaseDAO):
 
     #[IMPLEMENTATION] 
     #Format item from reading operations    
-    [TODO]
     def format_item_from_reading(self,read_item_data):
         return  {
                     'name': read_item_data['Item']['name']['S'],
@@ -75,7 +74,6 @@ class UserDAO(base_dao.BaseDAO):
     #[IMPLEMENTATION] 
     #Validate item
     #Returns True or false
-    [TODO]
     def validate_item(self, item):
         field_names = ['name','password']
         if not all(field in item for field in field_names):
