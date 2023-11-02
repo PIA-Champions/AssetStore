@@ -12,25 +12,25 @@ class TestUserDAO:
 
     @classmethod
     def _delete_table(cls):
-        print('Entering _delete_table')
+        print('Entering _delete_table\n')
         dynamodb = boto3.resource("dynamodb")
         table = dynamodb.Table(cls._user_table_name)
         if table:
             table.delete()
-            print("Table deleted")
+            print("Table deleted\n")
             time.sleep(cls._SLEEP)
-        print('Table was not deleted (Not found)')
+        print('Table was not deleted (Not found)\n')
 
     @classmethod
     def _get_table(cls):
-        print('Entering _get_table')
+        print('Entering _get_table\n')
         dynamodb = boto3.resource("dynamodb")
         response =  dynamodb.Table(cls._user_table_name)
         return response
 
     @classmethod    
     def _get_table_status(cls):
-        print('Entering _get_table_status')
+        print('Entering _get_table_status\n')
         table = cls._get_table()
         if table:
             return table.table_status
@@ -38,7 +38,7 @@ class TestUserDAO:
 
     @classmethod
     def _get_table_item(cls,item_id):
-        print('Entering _get_table_item')
+        print('Entering _get_table_item\n')
         table = cls._get_table()
         if table:
             return table.get_item(
@@ -52,7 +52,7 @@ class TestUserDAO:
     #User_DAO must create a table that should be accessible by boto3
     def setup_class(self):
         self._dao = dao.User_DAO(self._user_table_name)
-        print('Entering setup_class')
+        print('Entering setup_class\n')
         ret_value = self._dao.create_user_table()
         print('create_user_table: '+ ret_value)
         table_status = self._get_table_status() 
@@ -61,7 +61,7 @@ class TestUserDAO:
         
     #User_DAO must create item on user table
     def test_create_user(self):
-        print('Entering test_create_user')
+        print('Entering test_create_user\n')
         user_param = {'name': 'Dino da Silva Sauro',
                       'password': '123456'}
         id = self._dao.create_user(user_param)
@@ -74,7 +74,7 @@ class TestUserDAO:
     
     #User_DAO must read an existing user
     def test_read_user(self):
-        print('Entering test_read_user')
+        print('Entering test_read_user\n')
         table = self._get_table()
         if table:
             user_param = {
@@ -98,11 +98,11 @@ class TestUserDAO:
                 'password': {'S': user_param['password']}
             },f'Error reading user. Incorrect response'
         else:
-            print("Test skipped (User Table not found)")    
+            print("Test skipped (User Table not found)\n")    
 
     #User_DAO must update an existing user
     def test_update_user(self):
-        print('Entering test_update_user')
+        print('Entering test_update_user\n')
         table = self._get_table()
         if table:
             user_param = {
@@ -128,11 +128,11 @@ class TestUserDAO:
             assert updated_item['name'] == updated_item_param['name'], f'user name not properly updated '
             assert updated_item['password'] == updated_item_param['password'], f'user password not properly updated'
         else:
-            print("Test skipped (user Table not found)")
+            print("Test skipped (user Table not found)\n")
 
     #User_DAO must delete an existing user
     def test_delete_user(self):
-        print('Entering test_delete_user')
+        print('Entering test_delete_user\n')
         table = self._get_table()
         if table:
             user_param = {
@@ -154,9 +154,9 @@ class TestUserDAO:
             response = table.get_item(Key={'id':user_id})
             assert 'Item' not in response,f'Error testing delete user. Bad response'
         else:
-            printf("Test skipped (User table not found)")
+            printf("Test skipped (User table not found)\n")
 
     def teardown_class(self):
-        print('Entering teardown_class')
+        print('Entering teardown_class\n')
         self._delete_table()
 

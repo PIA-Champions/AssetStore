@@ -7,16 +7,11 @@ from DAO import update_expression
 # Inherit from this class to implement 
 # specific DynamoDB table access objects.
 
-class DAO:
-    field_names = [] #Stores the table field names
-                     
+class BaseDAO:                 
     def __init__(self,table_name):
         self.table_name = table_name
         self.db_instance = dynamo.Dynamo_instance()
-        #A derivative class must set field names.
-        #Example:
-       
-
+        
     #Create id for a item
     #Must be implemented by derivative class
     def create_item_id(self,item_param):
@@ -38,7 +33,7 @@ class DAO:
 
     #format item from reading operations    
     #Must be implemented by derivative class
-    def format_item_from_reading(self,read_item_data)
+    def format_item_from_reading(self,read_item_data):
         #Example: 
         #return  {
         #            'name': read_item_data['Item']['name']['S'],
@@ -130,7 +125,7 @@ class DAO:
     # The item data
     # TABLE_NOT_FOUND
     # INVALID_INPUT_DATA
-    def read_ITEM(self,item_id):
+    def read_item(self,item_id):
         if not dynamo.check_table_existence(self.table_name):
             return return_values.TABLE_NOT_FOUND
         if not item_id:
@@ -169,7 +164,6 @@ class DAO:
     # INVALID_INPUT_DATA
     # ITEM_NOT_FOUND
     # SUCCESS
-    #[TODO]
     def update_item(self,item_id,item_param):
         if not dynamo.check_table_existence(self.table_name):
             return return_values.TABLE_NOT_FOUND

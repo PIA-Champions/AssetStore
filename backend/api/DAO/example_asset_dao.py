@@ -1,8 +1,11 @@
 from database_client import dynamo
 from definitions import return_values
 from util import data_util
+from DAO import base_dao
+from DAO import update_expression
 
-class ExampleAssetDAO(DAO):
+
+class ExampleAssetDAO(base_dao.BaseDAO):
     def __init__(self,table_name):
         super().__init__(table_name)
 
@@ -25,7 +28,7 @@ class ExampleAssetDAO(DAO):
 
     #[IMPLEMENTATION] 
     #Format item from reading operations    
-    def format_item_from_reading(self,read_item_data)
+    def format_item_from_reading(self,read_item_data):
         return  {
                     'name': read_item_data['Item']['name']['S'],
                     'description': read_item_data['Item']['description']['S'],
@@ -48,8 +51,6 @@ class ExampleAssetDAO(DAO):
         )
         return expression
         
-
-
     #[IMPLEMENTATION] 
     #Validate item
     #Returns True or false
