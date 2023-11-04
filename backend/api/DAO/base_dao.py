@@ -216,15 +216,24 @@ class BaseDAO:
             return str(e)    
     
     #Serch items using keyword criteria
-    def search_itens_by_keyword(keyword):
-        if not dynamo.check_table_existence(self.table_name):
-            return return_values.TABLE_NOT_FOUND
-            response = self.db_instance.client.scan(
-                    TableName=self.table_name,
-                    FilterExpression='contains(name, :keyword)',
-                    ExpressionAttributeValues={
-                        ':keyword': {'S': keyword}
-                })
-        if 'Items' in response:
-            return response.get('Items', [])
-        return return_values.ITEM_NOT_FOUND
+    #The string keyword will be searched on all attributes that are listed on attribute names.
+    #Returns:
+    #List of items
+    #TABLE_NOT_FOUND
+    #ITEM_NOT_FOUND
+    def search_itens_by_keyword(self, keyword,attribute_names):
+        try:
+            if not dynamo.check_table_existence(self.table_name):
+                return return_values.TABLE_NOT_FOUND
+                response = self.db_instance.client.scan(
+                        TableName=self.table_name,
+                        filter_expression = ' OR '.join([f'contains({attr}, :keyword)' for attr in attribute_names]),
+                        ExpressionAttributeValues={
+                            ':keyword': {'S': keyword}
+                    })
+            if 'Items' in response:
+                return response.get('Items', [])
+            return return_values.ITEM_NOT_FOUND
+        except Exception as e:
+            return str(e)    
+    
