@@ -49,8 +49,29 @@ class TestAssetDAO:
             assert 'Item' in item,f'Error Item not found'
             return item['Item']
         return return_values.TABLE_NOT_FOUND
+
+    @classmethod
+    def _create_table_item(cls,name,description,url)
+        if table:
+            asset_param = {
+                            'name': name,
+                            'description': description,
+                            'url': url
+                        }
+            
+            asset_id = data_util.create_hash(asset_param['name'])
+            asset_item = {
+                'id': asset_id,
+                'name': asset_param['name'],
+                'description': asset_param['description'],
+                'url': asset_param['url'],
+            }
+            table.put_item(Item=asset_item)
+            time.sleep(self._SLEEP)
+            return asset_id
+        return return_values.TABLE_NOT_FOUND
+
         
-    
     #asset_DAO must create a table that should be accessible by boto3
     def setup_class(self):
         self._dao = dao.Asset_DAO(self._asset_table_name)
@@ -81,21 +102,11 @@ class TestAssetDAO:
         print('\n[[Entering test_read_asset]]\n')
         table = self._get_table()
         if table:
-            asset_param = {
-                            'name': 'Cyberpunk 3d characters',
-                            'description': 'Packet with cyberpunk themed character 3d models (Male and female with animations)',
-                            'url': 'http://www.archive.com/32684/CP_Characters.zip'
-                        }
-            asset_id = data_util.create_hash(asset_param['name'])
-            asset_item = {
-                'id': asset_id,
-                'name': asset_param['name'],
-                'description': asset_param['description'], 
-                'url':asset_param['url']
-            }
-            table.put_item(Item=asset_item)
-            time.sleep(self._SLEEP)
-
+            asset_id = self._create_table_item('name': 'Spaceship sprites',
+                                'description': '2D top down spaceship sprites',
+                                'url':'http://www.archive.com/68758sfs850/2dSpaceships.zip')
+            assert asset_id != return_values.TABLE_NOT_FOUND,f'Error creating item before deletion'
+            
             response = self._dao.read_item(asset_id)
             
             assert response == {
@@ -112,20 +123,10 @@ class TestAssetDAO:
         print('\n[[Entering test_update_asset]]\n')
         table = self._get_table()
         if table:
-            asset_param = {
-                'name':'2D nature textures',
-                'description': 'Set of realistic textures for nature (wildlife) ambient',
-                'url':'http://www.archive.com/68758850/nature_textures.zip'
-            }
-            asset_id = data_util.create_hash(asset_param['name'])
-            asset_item = {
-                'id': asset_id,
-                'name': asset_param['name'],
-                'description': asset_param['description'],
-                'url': asset_param['url']
-            }
-            table.put_item(Item=asset_item)
-            time.sleep(self._SLEEP)
+            asset_id = self._create_table_item('name': 'Spaceship sprites',
+                                'description': '2D top down spaceship sprites',
+                                'url':'http://www.archive.com/68758sfs850/2dSpaceships.zip')
+            assert asset_id != return_values.TABLE_NOT_FOUND,f'Error creating item before deletion'
             updated_item_param = {
                 'name':'2D city textures',
                 'description':'Set of realistic textures for urban locations',
@@ -148,28 +149,39 @@ class TestAssetDAO:
         print('\n[[Entering test_delete_asset]]\n')
         table = self._get_table()
         if table:
-            asset_param = {
-                            'name': 'Spaceship sprites',
-                            'description': '2D top down spaceship sprites',
-                            'url':'http://www.archive.com/68758sfs850/2dSpaceships.zip'
-                        }
-            asset_id = data_util.create_hash(asset_param['name'])
-            asset_item = {
-                'id': asset_id,
-                'name': asset_param['name'],
-                'description': asset_param['description'],
-                'url': asset_param['url'],
-            }
-            table.put_item(Item=asset_item)
-            time.sleep(self._SLEEP)
-
+            asset_id = self._create_table_item('name': 'Spaceship sprites',
+                                'description': '2D top down spaceship sprites',
+                                'url':'http://www.archive.com/68758sfs850/2dSpaceships.zip')
+            assert asset_id != return_values.TABLE_NOT_FOUND,f'Error creating item before deletion'
             result = self._dao.delete_item(asset_id)
-
             assert result == return_values.SUCCESS,f'Error testing delete asset. Incorrect response'
             response = table.get_item(Key={'id':asset_id})
             assert 'Item' not in response,f'Error testing delete asset. Bad response'
         else:
             printf("Test skipped (asset table not found)\n")
+
+        #It must be possible to search assets by keyword
+        def test_search_assets_by_keyword(self):
+            print('\n[[Entering test_delete_asset]]\n')
+            table = self._get_table()
+            if table:
+                asset_id1 = self._create_table_item('name': 'name 1',
+                                    'description': 'description 1',
+                                    'url':'url 1')
+                assert asset_id1 != return_values.TABLE_NOT_FOUND,f'Error creating item before deletion'
+                asset_id2 = self._create_table_item('name': 'name 2',
+                                    'description': 'description 2',
+                                    'url':'url 2')
+                assert asset_id2 != return_values.TABLE_NOT_FOUND,f'Error creating item before deletion'
+                asset_id3 = self._create_table_item('name': 'name 3',
+                                    'description': 'description 3',
+                                    'url':'url 3')
+                assert asset_i3 != return_values.TABLE_NOT_FOUND,f'Error creating item before deletion'
+            else:
+                printf("Test skipped (asset table not found)\n")
+
+
+
 
     def teardown_class(self):
         print('\n[[Entering teardown_class]]\n')
