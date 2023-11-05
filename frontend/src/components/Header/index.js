@@ -8,15 +8,15 @@ function Header() {
         <header className={styles.header}>
             <Link to="./">
                 <h1>
-                    Asset Store
+                    ASSET STORE
                 </h1>
             </Link>
             <nav>
                 <HeaderLink url="./">Home</HeaderLink>
                 <HeaderLink url="./about">About</HeaderLink>
-                <HeaderLink url="./assets">Kit Assets</HeaderLink>
+                <HeaderLink url="./assets">Assets</HeaderLink>
+                {/* <HeaderSearch /> */}
             </nav>
-            <HeaderSearch />
         </header>
 
     )

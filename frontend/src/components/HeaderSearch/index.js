@@ -1,10 +1,10 @@
+import '../HeaderSearch/HeaderSearch.module.css'
+
 function HeaderSearch() {
     return (
-        <form action="" class="search-bar">
-            <input type="search" name="search" pattern=".*\S.*" required />
-                <button class="search-btn" type="submit">
-                    <span>Search</span>
-                </button>
+        <form className='form-search'>
+            <input type="text" placeholder="Search assets" />
+            <button type="submit">Search</button>
         </form>
     )
 }

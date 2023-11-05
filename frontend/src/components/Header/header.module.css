@@ -1,40 +1,32 @@
 /* >>> MOBILE <<< */
-/* body {
-    background: url('../../../public/imagens/gamer-mobile-hd.jpeg');
-    background-size: cover no-repeat;
-    min-height: 100%;
-} */
-
 .header a {
     text-decoration: none;
 }
 
 .header h1 {
-    padding: 1.1em;
+    padding: 1.4em 1.4em 0 1.4em;
     text-align: center;
     color: var(--roxo-escuro);
-}
-
-.header h1:hover,
-.header h1:focus {
-    color: #323673;
 }
 
 .header nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    bottom: 100px;
     padding: 0 3.0em 0 3.0em;
     color: #323673;
 }
 
 /* >>> TABLET <<< */
 @media only screen and (min-width: 768px) {
-
+    .header nav {
+        padding: 0 10em 0 10em;
+    }
 }
 
 /* >>> DESKTOP <<< */
-@media only screen and (min-width: 1080px) {    
+@media only screen and (min-width: 1280px) {    
     .header nav {
         padding: 2.1em 50em;
     } 
