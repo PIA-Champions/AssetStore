@@ -21,13 +21,28 @@
 /* >>> TABLET <<< */
 @media only screen and (min-width: 768px) {
     .header nav {
-        padding: 0 10em 0 10em;
+        padding: 0 12em 0 12em;
     }
 }
 
 /* >>> DESKTOP <<< */
 @media only screen and (min-width: 1280px) {    
+    .header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .header h1 {
+        padding: 1em 1em 0 1em;
+        width: 7em;
+    }
+
     .header nav {
-        padding: 2.1em 50em;
+        padding: 0;
+        position: relative;
+        top: 1em;
+        right: 5em;
     } 
 }
