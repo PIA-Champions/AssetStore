@@ -12,7 +12,7 @@ class Asset_DAO(base_dao.BaseDAO):
     #[IMPLEMENTATION]
     # Create id for a item
     def create_item_id(self,item_param):
-        return data_util.create_hash(item_param['name']) 
+        return data_util.create_hash(item_param['title']) 
 
     #[IMPLEMENTATION]
     # Format item for writing operations 
@@ -20,9 +20,9 @@ class Asset_DAO(base_dao.BaseDAO):
     def format_item_for_writing(self,item_id,item_param):
         item = {
             'id':{'S':item_id},
-            'name':{'S':item_param['name']},
+            'title':{'S':item_param['title']},
             'description':{'S':item_param['description']},
-            'url':{'S':item_param['url']}
+            'web_address':{'S':item_param['web_address']}
         }
         return item
 
@@ -30,9 +30,9 @@ class Asset_DAO(base_dao.BaseDAO):
     #Format item from reading operations    
     def format_item_from_reading(self,read_item_data):
         return  {
-                    'name': read_item_data['Item']['name']['S'],
+                    'title': read_item_data['Item']['title']['S'],
                     'description': read_item_data['Item']['description']['S'],
-                    'url': read_item_data['Item']['url']['S']
+                    'web_address': read_item_data['Item']['web_address']['S']
                 }
         return item_param
 
@@ -41,12 +41,12 @@ class Asset_DAO(base_dao.BaseDAO):
     #Must return update expressions for update operations 
     def create_update_expression(self,item_param):
         expression = update_expression.UpdateExpression(
-            "SET #n = :new_name, #d = :new_description,#u = :new_url",
-            {"#n": "name", "#d": "description", "#u":"url"},
+            "SET #t = :new_title, #d = :new_description,#w = :new_web_address",
+            {"#t": "title", "#d": "description", "#w":"web_address"},
             {
-                ":new_name": {"S": item_param['name']},
+                ":new_title": {"S": item_param['title']},
                 ":new_description": {"S": item_param['description']},
-                ":new_url": {"S": item_param['url']},
+                ":new_web_address": {"S": item_param['web_address']},
             }
         )
         return expression
@@ -55,7 +55,7 @@ class Asset_DAO(base_dao.BaseDAO):
     #Validate item
     #Returns True or false
     def validate_item(self, item):
-        field_names = ['name','description','url']
+        field_names = ['title','description','web_address']
         if not all(field in item for field in field_names):
             return False
         if not all(isinstance(item[field], str) for field in field_names):

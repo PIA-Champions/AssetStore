@@ -215,3 +215,26 @@ class BaseDAO:
         except Exception as e:
             return str(e)    
     
+    #Serch items using keyword criteria
+    #The string keyword will be searched on all attributes that are listed on attribute names.
+    #Returns:
+    #List of items
+    #TABLE_NOT_FOUND
+    #ITEM_NOT_FOUND
+    def search_itens_by_keyword(self, keyword,attribute_names):
+        filter_expression = str(' OR '.join([f'contains({attr}, :keyword)' for attr in attribute_names]))
+        expression_attribute_values = {':keyword': {'S': keyword}}
+        try:
+            if not dynamo.check_table_existence(self.table_name):
+                return return_values.TABLE_NOT_FOUND
+            response = self.db_instance.client.scan(
+                    TableName=self.table_name,
+                    FilterExpression = filter_expression,
+                    ExpressionAttributeValues=expression_attribute_values
+                    )
+            if 'Items' in response:
+                return response
+            return return_values.ITEM_NOT_FOUND
+        except Exception as e:
+            return str(e)    
+    
