@@ -233,7 +233,7 @@ class BaseDAO:
                     ExpressionAttributeValues=expression_attribute_values
                     )
             if 'Items' in response:
-                return response.get('Items', [])
+                return response
             return return_values.ITEM_NOT_FOUND
         except Exception as e:
             return str(e)    

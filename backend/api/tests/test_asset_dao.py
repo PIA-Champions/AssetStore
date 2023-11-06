@@ -158,7 +158,7 @@ class TestAssetDAO:
             asset_id = self._create_table_item('Spaceship sprites',
                                 '2D top down spaceship sprites',
                                 'http://www.archive.com/68758sfs850/2dSpaceships.zip')
-            assert asset_id != return_values.TABLE_NOT_FOUND,f'Error creating item before deletion'
+            assert asset_id != return_values.TABLE_NOT_FOUND,f'Error: item not created (TABLE NOT FOUND)'
             result = self._dao.delete_item(asset_id)
             assert result == return_values.SUCCESS,f'Error testing delete asset. Incorrect response'
             response = table.get_item(Key={'id':asset_id})
@@ -184,8 +184,26 @@ class TestAssetDAO:
                                 'url 3')
             assert asset_id3 != return_values.TABLE_NOT_FOUND,f'Error creating item before deletion'
             
-            test_result1 = self._dao.search_itens_by_keyword("1",{'title','description','web_address'})
+            test_result1 = self._dao.search_itens_by_keyword("name 1",{'title','description','web_address'})
             print(test_result1)
+            print('\n')
+            assert test_result1['Items'][0]['id']['S']==asset_id1
+
+            test_result2 = self._dao.search_itens_by_keyword("description 2",{'title','description','web_address'})
+            print(test_result2)
+            print('\n')
+            assert test_result2['Items'][0]['id']['S']==asset_id2
+            
+            test_result3 = self._dao.search_itens_by_keyword("url 3",{'title','description','web_address'})
+            print(test_result3)
+            print('\n')
+            assert test_result3['Items'][0]['id']['S']==asset_id3
+
+            test_result4 = self._dao.search_itens_by_keyword("url",{'title','description','web_address'})
+            print(test_result4)
+            print('\n')
+            assert test_result4['Count']==3
+
         else:
             printf("Test skipped (asset table not found)\n")
 
