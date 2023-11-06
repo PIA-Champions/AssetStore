@@ -39,11 +39,13 @@ class User_DAO(base_dao.BaseDAO):
         item = {
             'id':{'S':item_id},
             'name':{'S':item_param['name']},
+            'bought_assets':{'BS':item_param.get('bought_assets', [])},
             'password':{'S':item_param['password']},
             'hash':{'B':password_fields['hash']},
             'salt':{'B':password_fields['salt']},
             'rounds':{'N':str(password_fields['rounds'])},
             'hashed':{'B':password_fields['hashed']}
+            
         }
         return item
 
@@ -53,6 +55,7 @@ class User_DAO(base_dao.BaseDAO):
         return  {
                     'name': read_item_data['Item']['name']['S'],
                     'password': read_item_data['Item']['password']['S'],
+                    'bought_assets':read_item_data['Item']['bought_assets']['BS']
                 }
         return item_param
 
