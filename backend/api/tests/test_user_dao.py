@@ -36,6 +36,28 @@ class TestUserDAO:
             return table.table_status
         return return_values.TABLE_NOT_FOUND
 
+     @classmethod
+    def _create_table_item(cls,name,password,bought_assets):
+        table = cls._get_table()
+        if table:
+            user_param = {
+                            'name': name,
+                            'password': password,
+                            'bought_assets': bought_assets
+                        }
+            
+            user_id = data_util.create_hash(user_param['name'])
+            user_item = {
+                'id': user_id,
+                'name': asset_param['name'],
+                'bought_assets': asset_param['bought_assets']
+            }
+            table.put_item(Item=user_item)
+            time.sleep(cls._SLEEP)
+            return user_id
+        return return_values.TABLE_NOT_FOUND
+
+
     @classmethod
     def _get_table_item(cls,item_id):
         print('Entering _get_table_item\n')
@@ -66,12 +88,11 @@ class TestUserDAO:
     #User_DAO must create item on user table
     def test_create_user(self):
         print('Entering test_create_user\n')
-        user_param = {'name': 'Dino da Silva Sauro',
-                      'password': '123456'}
-        id = self._dao.create_item(user_param)
-        print('expected item id as response. Received ' + id)
-        time.sleep(self._SLEEP)
-        response = self._get_table_item(id)
+        user_id = self._create_table_item('Dino da Silva Sauro',
+                                    '123456',
+                                    [])
+        assert user_id != return_values.TABLE_NOT_FOUND,f'Error creating user (table not found)'
+        response = self._get_table_item(user_id)
         print(response)
         assert response["name"] == user_param["name"],f'Error testing created user. name diverges'
         assert response["password"] == user_param["password"],f'Error testing created user. password diverges'
@@ -81,25 +102,18 @@ class TestUserDAO:
         print('Entering test_read_user\n')
         table = self._get_table()
         if table:
-            user_param = {
-                            'name': 'Fran da Silva Sauro',
-                            'password': 'mypass'
-                        }
-            user_id = data_util.create_hash(user_param['name'])
-            user_item = {
-                'id': user_id,
-                'name': user_param['name'],
-                'password': user_param['password']
-            }
-            table.put_item(Item=user_item)
-            time.sleep(self._SLEEP)
-
+            user_id = self._create_table_item('Fran da Silva Sauro',
+                                        'mypass',
+                                        [])
+            assert user_id != return_values.TABLE_NOT_FOUND,f'Error creating user (table not found)'
+        
             response = self._dao.read_item(user_id)
             
             assert response == {
                 'id': {'S': user_id},
                 'name': {'S': user_param['name']},
-                'password': {'S': user_param['password']}
+                'password': {'S': user_param['password']},
+                'bought_assets': {'BS':user_param['bought_assets']}
             },f'Error reading user. Incorrect response'
         else:
             print("Test skipped (User Table not found)\n")    
@@ -111,19 +125,18 @@ class TestUserDAO:
         if table:
             user_param = {
                 'name':'Mônica Invertebrada',
-                'password': 'blue'
+                'password': 'blue',
+                'bought_assets':[]
             }
-            user_id = data_util.create_hash(user_param['name'])
-            user_item = {
-                'id': user_id,
-                'name': user_param['name'],
-                'password': user_param['password']
-            }
-            table.put_item(Item=user_item)
-            time.sleep(self._SLEEP)
+            user_id = self._create_table_item(user_param['name'],
+                                        user_param['password'],
+                                        user_param['bought_assets'])
+            assert user_id != return_values.TABLE_NOT_FOUND,f'Error creating user (table not found)'
+        
             updated_item_param = {
                 'name':'Roy Hess',
-                'password':'Brown'
+                'password':'Brown',
+                'bought_assets':[]
             }
             result = self._dao.update_item(user_id,updated_item_param)
             assert result == return_values.SUCCESS,f'Error testing user update. Incorrect response'
@@ -131,6 +144,7 @@ class TestUserDAO:
             updated_item = response.get('Item', {})
             assert updated_item['name'] == updated_item_param['name'], f'user name not properly updated '
             assert updated_item['password'] == updated_item_param['password'], f'user password not properly updated'
+            assert updated_item['bought_assets'] == updated_item_param['bought_assets'], f'user bought assets not properly updated'
         else:
             print("Test skipped (user Table not found)\n")
 
@@ -139,18 +153,10 @@ class TestUserDAO:
         print('Entering test_delete_user\n')
         table = self._get_table()
         if table:
-            user_param = {
-                            'name': 'Sr. Richfield',
-                            'password': 'TheBo$$'
-                        }
-            user_id = data_util.create_hash(user_param['name'])
-            user_item = {
-                'id': user_id,
-                'name': user_param['name'],
-                'password': user_param['password']
-            }
-            table.put_item(Item=user_item)
-            time.sleep(self._SLEEP)
+            user_id = self._create_table_item('Sr. Richfield',
+                                        'TheBo$$',
+                                        [])
+            assert user_id != return_values.TABLE_NOT_FOUND,f'Error creating user (table not found)'
 
             result = self._dao.delete_item(user_id)
 

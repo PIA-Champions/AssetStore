@@ -64,11 +64,12 @@ class User_DAO(base_dao.BaseDAO):
     #Must return update expressions for update operations 
     def create_update_expression(self,item_param):
         expression = update_expression.UpdateExpression(
-            "SET #n = :new_name, #p = :new_password",
-            {"#n": "name", "#p": "password"},
+            "SET #n = :new_name, #p = :new_password,#b = :new_bought_assets",
+            {"#n": "name", "#p": "password","#b","bought_assets"},
             {
                 ":new_name": {"S": item_param['name']},
-                ":new_password": {"S": item_param['password']}
+                ":new_password": {"S": item_param['password']},
+                ":new_bought_assets":{"BS":item_param['bought_assets']}
             }
         )
         return expression
