@@ -55,17 +55,17 @@ class TestAssetDAO:
         table = cls._get_table()
         if table:
             asset_param = {
-                            'name': name,
+                            'title': name,
                             'description': description,
-                            'url': url
+                            'web_address': url
                         }
             
-            asset_id = data_util.create_hash(asset_param['name'])
+            asset_id = data_util.create_hash(asset_param['title'])
             asset_item = {
                 'id': asset_id,
-                'name': asset_param['name'],
+                'title': asset_param['title'],
                 'description': asset_param['description'],
-                'url': asset_param['url'],
+                'web_address': asset_param['web_address'],
             }
             table.put_item(Item=asset_item)
             time.sleep(cls._SLEEP)
@@ -86,17 +86,17 @@ class TestAssetDAO:
     #asset_DAO must create item on asset table
     def test_create_asset(self):
         print('\n[[Entering test_create_asset]]\n')
-        asset_param = {'name': 'Medieval Tileset',
+        asset_param = {'title': 'Medieval Tileset',
                       'description': 'A packet containing medieval themed tilesets for 2D RPG Games',
-                      'url': 'http://www.archive.com/63482/medievaltiles.zip'}
+                      'web_address': 'http://www.archive.com/63482/medievaltiles.zip'}
         id = self._dao.create_item(asset_param)
         print('expected item id as response. Received ' + id)
         time.sleep(self._SLEEP)
         response = self._get_table_item(id)
         print(response)
-        assert response["name"] == asset_param["name"],f'Error testing created asset. name diverges'
+        assert response["title"] == asset_param["title"],f'Error testing created asset. name diverges'
         assert response["description"] == asset_param["description"],f'Error testing created asset. description diverges'
-        assert response["url"] == asset_param["url"],f'Error testing created asset. url diverges'
+        assert response["web_address"] == asset_param["web_address"],f'Error testing created asset. url diverges'
     
     #asset_DAO must read an existing asset
     def test_read_asset(self):
@@ -104,22 +104,22 @@ class TestAssetDAO:
         table = self._get_table()
         if table:
             asset_param = {
-                'name':'Spaceship sprites',
+                'title':'Spaceship sprites',
                 'description':'2D top down spaceship sprites',
-                'url':'http://www.archive.com/68758sfs850/2dSpaceships.zip'
+                'web_address':'http://www.archive.com/68758sfs850/2dSpaceships.zip'
             }
-            asset_id = self._create_table_item(asset_param['name'],
+            asset_id = self._create_table_item(asset_param['title'],
                                 asset_param['description'],
-                                asset_param['url'])
+                                asset_param['web_address'])
             assert asset_id != return_values.TABLE_NOT_FOUND,f'Error creating item before deletion'
             
             response = self._dao.read_item(asset_id)
             
             assert response == {
                 'id': {'S': asset_id},
-                'name': {'S': asset_param['name']},
+                'title': {'S': asset_param['title']},
                 'description': {'S': asset_param['description']},
-                'url': {'S': asset_param['url']}
+                'web_address': {'S': asset_param['web_address']}
             },f'Error reading asset. Incorrect response'
         else:
             print("Test skipped (asset Table not found)\n")    
@@ -134,18 +134,18 @@ class TestAssetDAO:
                                 'http://www.archive.com/68758sfs850/2dSpaceships.zip')
             assert asset_id != return_values.TABLE_NOT_FOUND,f'Error creating item before deletion'
             updated_item_param = {
-                'name':'2D city textures',
+                'title':'2D city textures',
                 'description':'Set of realistic textures for urban locations',
-                'url':'http://www.archive.com/68758850/urban_textures.zip'
+                'web_address':'http://www.archive.com/68758850/urban_textures.zip'
             }
             result = self._dao.update_item(asset_id,updated_item_param)
             print(result)
             assert result == return_values.SUCCESS,f'Error testing asset update. Incorrect response'
             response = table.get_item(Key={'id': asset_id})
             updated_item = response.get('Item', {})
-            assert updated_item['name'] == updated_item_param['name'], f'asset name not properly updated '
+            assert updated_item['title'] == updated_item_param['title'], f'asset name not properly updated '
             assert updated_item['description'] == updated_item_param['description'], f'asset description not properly updated'
-            assert updated_item['url'] == updated_item_param['url'], f'asset url not properly updated'
+            assert updated_item['web_address'] == updated_item_param['web_address'], f'asset url not properly updated'
             
         else:
             print("Test skipped (asset Table not found)\n")
@@ -184,7 +184,7 @@ class TestAssetDAO:
                                 'url 3')
             assert asset_id3 != return_values.TABLE_NOT_FOUND,f'Error creating item before deletion'
             
-            test_result1 = self._dao.search_itens_by_keyword("1",{'description'})
+            test_result1 = self._dao.search_itens_by_keyword("1",{'title','description','web_address'})
             print(test_result1)
         else:
             printf("Test skipped (asset table not found)\n")
