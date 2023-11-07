@@ -60,15 +60,7 @@ class TestAssetDAO:
                             'web_address': url
                         }
             
-            asset_id = data_util.create_hash(asset_param['title'])
-            asset_item = {
-                'id': asset_id,
-                'title': asset_param['title'],
-                'description': asset_param['description'],
-                'web_address': asset_param['web_address'],
-            }
-            table.put_item(Item=asset_item)
-            time.sleep(cls._SLEEP)
+            asset_id = cls._dao.create_item(asset_param)
             return asset_id
         return return_values.TABLE_NOT_FOUND
 

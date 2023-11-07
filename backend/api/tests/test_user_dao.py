@@ -46,14 +46,8 @@ class TestUserDAO:
                             'bought_assets': bought_assets
                         }
             
-            user_id = data_util.create_hash(user_param['name'])
-            user_item = {
-                'id': user_id,
-                'name': user_param['name'],
-                'bought_assets':user_param.get('bought_assets', [''])
-            }
-            table.put_item(Item=user_item)
-            time.sleep(cls._SLEEP)
+            user_id = cls._dao.create_item(user_param)
+            
             return user_id
         return return_values.TABLE_NOT_FOUND
 
