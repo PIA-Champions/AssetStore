@@ -39,7 +39,7 @@ class User_DAO(base_dao.BaseDAO):
         item = {
             'id':{'S':item_id},
             'name':{'S':item_param['name']},
-            'bought_assets':{'BS':item_param.get('bought_assets', [])},
+            'bought_assets':{'SS':item_param.get('bought_assets', [''])},
             'password':{'S':item_param['password']},
             'hash':{'B':password_fields['hash']},
             'salt':{'B':password_fields['salt']},
@@ -55,7 +55,7 @@ class User_DAO(base_dao.BaseDAO):
         return  {
                     'name': read_item_data['Item']['name']['S'],
                     'password': read_item_data['Item']['password']['S'],
-                    'bought_assets':read_item_data['Item']['bought_assets']['BS']
+                    'bought_assets':read_item_data['Item']['bought_assets']['SS']
                 }
         return item_param
 
@@ -65,11 +65,11 @@ class User_DAO(base_dao.BaseDAO):
     def create_update_expression(self,item_param):
         expression = update_expression.UpdateExpression(
             "SET #n = :new_name, #p = :new_password,#b = :new_bought_assets",
-            {"#n": "name", "#p": "password","#b","bought_assets"},
+            {"#n": "name", "#p": "password","#b":"bought_assets"},
             {
                 ":new_name": {"S": item_param['name']},
                 ":new_password": {"S": item_param['password']},
-                ":new_bought_assets":{"BS":item_param['bought_assets']}
+                ":new_bought_assets":{"SS":item_param.get('bought_assets', [''])}
             }
         )
         return expression
