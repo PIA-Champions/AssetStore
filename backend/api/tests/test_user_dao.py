@@ -143,13 +143,15 @@ class TestUserDAO:
                 'password':'Brown',
                 'bought_assets':['']
             }
+
             result = self._dao.update_item(user_id,updated_item_param)
             assert result == return_values.SUCCESS,f'Error testing user update. Incorrect response'
-            response = table.get_item(Key={'id': user_id})
-            updated_item = response.get('Item', {})
-            assert updated_item['name'] == updated_item_param['name'], f'user name not properly updated '
-            assert updated_item['password'] == updated_item_param['password'], f'user password not properly updated'
-            assert updated_item['bought_assets'] == updated_item_param['bought_assets'], f'user bought assets not properly updated'
+            
+            response = self._get_table_item(user_id)
+            assert response['name'] == updated_item_param['name'], f'user name not properly updated '
+            assert response['password'] == updated_item_param['password'], f'user password not properly updated'
+            assert response['bought_assets'] == updated_item_param['bought_assets'], f'user bought assets not properly updated'
+            
         else:
             print("Test skipped (user Table not found)\n")
 

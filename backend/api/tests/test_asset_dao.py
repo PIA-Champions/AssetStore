@@ -129,14 +129,14 @@ class TestAssetDAO:
                 'description':'Set of realistic textures for urban locations',
                 'web_address':'http://www.archive.com/68758850/urban_textures.zip'
             }
+            
             result = self._dao.update_item(asset_id,updated_item_param)
-            print(result)
             assert result == return_values.SUCCESS,f'Error testing asset update. Incorrect response'
-            response = table.get_item(Key={'id': asset_id})
-            updated_item = response.get('Item', {})
-            assert updated_item['title'] == updated_item_param['title'], f'asset name not properly updated '
-            assert updated_item['description'] == updated_item_param['description'], f'asset description not properly updated'
-            assert updated_item['web_address'] == updated_item_param['web_address'], f'asset url not properly updated'
+            
+            response = self._get_table_item(asset_id)
+            assert response['title'] == updated_item_param['title'], f'asset name not properly updated '
+            assert response['description'] == updated_item_param['description'], f'asset description not properly updated'
+            assert response['web_address'] == updated_item_param['web_address'], f'asset url not properly updated'
             
         else:
             print("Test skipped (asset Table not found)\n")
