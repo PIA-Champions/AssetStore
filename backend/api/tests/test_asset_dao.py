@@ -39,16 +39,8 @@ class TestAssetDAO:
     @classmethod
     def _get_table_item(cls,item_id):
         print('Entering _get_table_item\n')
-        table = cls._get_table()
-        if table:
-            item =  table.get_item(
-                Key={
-                    'id':item_id
-                }
-            )
-            assert 'Item' in item,f'Error Item not found'
-            return item['Item']
-        return return_values.TABLE_NOT_FOUND
+        item =  cls._dao.read_item(item_id)
+        return item
 
     @classmethod
     def _create_table_item(cls,name,description,url):
