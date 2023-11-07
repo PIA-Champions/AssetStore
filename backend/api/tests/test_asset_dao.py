@@ -116,10 +116,9 @@ class TestAssetDAO:
             response = self._dao.read_item(asset_id)
             
             assert response == {
-                'id': {'S': asset_id},
-                'title': {'S': asset_param['title']},
-                'description': {'S': asset_param['description']},
-                'web_address': {'S': asset_param['web_address']}
+                'title':asset_param['title'],
+                'description':asset_param['description'],
+                'web_address':asset_param['web_address']
             },f'Error reading asset. Incorrect response'
         else:
             print("Test skipped (asset Table not found)\n")    

@@ -41,7 +41,7 @@ class BaseDAO:
         #            'description': read_item_data['Item']['description']['S'],
         #            'url': read_item_data['Item']['url']['S']
         #        }
-        return item_param
+        return read_item_data
 
     #Create update expressions
     #Must be implemented by derivative class
@@ -161,7 +161,7 @@ class BaseDAO:
                     Key = {'id': {'S': item_id}}
             )
             if 'Item' in response:
-                return response['Item']
+                return self.format_item_from_reading(response)
             else:
                 return return_values.ITEM_NOT_FOUND
         except Exception as e:

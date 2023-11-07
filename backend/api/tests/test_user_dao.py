@@ -50,7 +50,7 @@ class TestUserDAO:
             user_item = {
                 'id': user_id,
                 'name': user_param['name'],
-                'bought_assets': user_param['bought_assets']
+                'bought_assets':user_param.get('bought_assets', [''])
             }
             table.put_item(Item=user_item)
             time.sleep(cls._SLEEP)
@@ -122,10 +122,9 @@ class TestUserDAO:
             response = self._dao.read_item(user_id)
             
             assert response == {
-                'id': {'S': user_id},
-                'name': {'S': user_param['name']},
-                'password': {'S': user_param['password']},
-                'bought_assets': {'BS':user_param['bought_assets']}
+                'name':user_param['name'],
+                'password':user_param['password'],
+                'bought_assets':user_param['bought_assets']
             },f'Error reading user. Incorrect response'
         else:
             print("Test skipped (User Table not found)\n")    
