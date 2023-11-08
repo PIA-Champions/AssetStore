@@ -1,8 +1,10 @@
-import FormRegister from "../../components/Form";
+import FormRegister from "../../components/Form/index.js";
 
 function Login() {
     return (
-        <FormRegister />
+        <div className="header">
+            <FormRegister />
+        </div>
     )
 }
 
