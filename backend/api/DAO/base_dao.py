@@ -238,3 +238,8 @@ class BaseDAO:
         except Exception as e:
             return str(e)    
     
+    def delete_table(self):
+        if dynamo.check_table_existence(self.table_name):
+            self.db_instance.client.delete_table(TableName = self.table_name)
+            return dynamo.wait_table_vanish(self.table_name)
+        return return_values.TABLE_NOT_FOUND

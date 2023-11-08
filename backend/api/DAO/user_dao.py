@@ -51,11 +51,7 @@ class User_DAO(base_dao.BaseDAO):
 
     #[IMPLEMENTATION] 
     #Format item from reading operations    
-    def format_item_from_reading(self,read_item_data):
-        
-        print('DELETE DELETE DELETE DELETE DELETE DELETE ')
-        print(read_item_data)
-            
+    def format_item_from_reading(self,read_item_data):    
         if 'Item' in read_item_data:
             return  {
                         'name': read_item_data['Item']['name']['S'],

@@ -13,13 +13,7 @@ class TestUserDAO:
     @classmethod
     def _delete_table(cls):
         print('Entering _delete_table\n')
-        dynamodb = boto3.resource("dynamodb")
-        table = dynamodb.Table(cls._user_table_name)
-        if table:
-            table.delete()
-            print("Table deleted\n")
-            time.sleep(cls._SLEEP)
-        print('Table was not deleted (Not found)\n')
+        cls._dao.delete_table()
 
     @classmethod
     def _get_table(cls):
@@ -166,4 +160,5 @@ class TestUserDAO:
     def teardown_class(self):
         print('\n[[Entering teardown_class]]\n')
         self._delete_table()
+        
 
