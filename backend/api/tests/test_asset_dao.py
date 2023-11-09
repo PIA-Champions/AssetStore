@@ -13,14 +13,8 @@ class TestAssetDAO:
     @classmethod
     def _delete_table(cls):
         print('Entering _delete_table\n')
-        dynamodb = boto3.resource("dynamodb")
-        table = dynamodb.Table(cls._asset_table_name)
-        if table:
-            table.delete()
-            print("Table deleted\n")
-            time.sleep(cls._SLEEP)
-        print('Table was not deleted (Not found)\n')
-
+        cls._dao.delete_table()
+        
     @classmethod
     def _get_table(cls):
         print('Entering _get_table\n')
@@ -189,8 +183,6 @@ class TestAssetDAO:
 
         else:
             printf("Test skipped (asset table not found)\n")
-
-
 
 
     def teardown_class(self):
