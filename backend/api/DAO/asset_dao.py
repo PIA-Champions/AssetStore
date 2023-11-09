@@ -34,7 +34,6 @@ class Asset_DAO(base_dao.BaseDAO):
                     'description': read_item_data['Item']['description']['S'],
                     'web_address': read_item_data['Item']['web_address']['S']
                 }
-        return item_param
 
     #[IMPLEMENTATION] 
     #Create update expressions

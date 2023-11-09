@@ -39,33 +39,38 @@ class User_DAO(base_dao.BaseDAO):
         item = {
             'id':{'S':item_id},
             'name':{'S':item_param['name']},
+            'bought_assets':{'SS':item_param.get('bought_assets', [''])},
             'password':{'S':item_param['password']},
             'hash':{'B':password_fields['hash']},
             'salt':{'B':password_fields['salt']},
             'rounds':{'N':str(password_fields['rounds'])},
             'hashed':{'B':password_fields['hashed']}
+            
         }
         return item
 
     #[IMPLEMENTATION] 
     #Format item from reading operations    
-    def format_item_from_reading(self,read_item_data):
-        return  {
-                    'name': read_item_data['Item']['name']['S'],
-                    'password': read_item_data['Item']['password']['S'],
-                }
-        return item_param
+    def format_item_from_reading(self,read_item_data):    
+        if 'Item' in read_item_data:
+            return  {
+                        'name': read_item_data['Item']['name']['S'],
+                        'password': read_item_data['Item']['password']['S'],
+                        'bought_assets':read_item_data['Item']['bought_assets']['SS']
+                    }
+        return None
 
     #[IMPLEMENTATION] 
     #Create update expressions
     #Must return update expressions for update operations 
     def create_update_expression(self,item_param):
         expression = update_expression.UpdateExpression(
-            "SET #n = :new_name, #p = :new_password",
-            {"#n": "name", "#p": "password"},
+            "SET #n = :new_name, #p = :new_password,#b = :new_bought_assets",
+            {"#n": "name", "#p": "password","#b":"bought_assets"},
             {
                 ":new_name": {"S": item_param['name']},
-                ":new_password": {"S": item_param['password']}
+                ":new_password": {"S": item_param['password']},
+                ":new_bought_assets":{"SS":item_param.get('bought_assets', [''])}
             }
         )
         return expression

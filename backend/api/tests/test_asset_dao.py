@@ -13,14 +13,8 @@ class TestAssetDAO:
     @classmethod
     def _delete_table(cls):
         print('Entering _delete_table\n')
-        dynamodb = boto3.resource("dynamodb")
-        table = dynamodb.Table(cls._asset_table_name)
-        if table:
-            table.delete()
-            print("Table deleted\n")
-            time.sleep(cls._SLEEP)
-        print('Table was not deleted (Not found)\n')
-
+        cls._dao.delete_table()
+        
     @classmethod
     def _get_table(cls):
         print('Entering _get_table\n')
@@ -39,16 +33,8 @@ class TestAssetDAO:
     @classmethod
     def _get_table_item(cls,item_id):
         print('Entering _get_table_item\n')
-        table = cls._get_table()
-        if table:
-            item =  table.get_item(
-                Key={
-                    'id':item_id
-                }
-            )
-            assert 'Item' in item,f'Error Item not found'
-            return item['Item']
-        return return_values.TABLE_NOT_FOUND
+        item =  cls._dao.read_item(item_id)
+        return item
 
     @classmethod
     def _create_table_item(cls,name,description,url):
@@ -60,15 +46,7 @@ class TestAssetDAO:
                             'web_address': url
                         }
             
-            asset_id = data_util.create_hash(asset_param['title'])
-            asset_item = {
-                'id': asset_id,
-                'title': asset_param['title'],
-                'description': asset_param['description'],
-                'web_address': asset_param['web_address'],
-            }
-            table.put_item(Item=asset_item)
-            time.sleep(cls._SLEEP)
+            asset_id = cls._dao.create_item(asset_param)
             return asset_id
         return return_values.TABLE_NOT_FOUND
 
@@ -116,10 +94,9 @@ class TestAssetDAO:
             response = self._dao.read_item(asset_id)
             
             assert response == {
-                'id': {'S': asset_id},
-                'title': {'S': asset_param['title']},
-                'description': {'S': asset_param['description']},
-                'web_address': {'S': asset_param['web_address']}
+                'title':asset_param['title'],
+                'description':asset_param['description'],
+                'web_address':asset_param['web_address']
             },f'Error reading asset. Incorrect response'
         else:
             print("Test skipped (asset Table not found)\n")    
@@ -138,14 +115,14 @@ class TestAssetDAO:
                 'description':'Set of realistic textures for urban locations',
                 'web_address':'http://www.archive.com/68758850/urban_textures.zip'
             }
+            
             result = self._dao.update_item(asset_id,updated_item_param)
-            print(result)
             assert result == return_values.SUCCESS,f'Error testing asset update. Incorrect response'
-            response = table.get_item(Key={'id': asset_id})
-            updated_item = response.get('Item', {})
-            assert updated_item['title'] == updated_item_param['title'], f'asset name not properly updated '
-            assert updated_item['description'] == updated_item_param['description'], f'asset description not properly updated'
-            assert updated_item['web_address'] == updated_item_param['web_address'], f'asset url not properly updated'
+            
+            response = self._get_table_item(asset_id)
+            assert response['title'] == updated_item_param['title'], f'asset name not properly updated '
+            assert response['description'] == updated_item_param['description'], f'asset description not properly updated'
+            assert response['web_address'] == updated_item_param['web_address'], f'asset url not properly updated'
             
         else:
             print("Test skipped (asset Table not found)\n")
@@ -206,8 +183,6 @@ class TestAssetDAO:
 
         else:
             printf("Test skipped (asset table not found)\n")
-
-
 
 
     def teardown_class(self):
