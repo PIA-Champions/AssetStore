@@ -1,9 +1,14 @@
 from DAO import user_dao,asset_pack_dao
 from definitions import database_defs, return_values
 class Purchase_Controller:
-    def __init__():
-        self._u_dao = user_dao.User_DAO(database_defs.USER_TABLE_NAME)
-        self._p_dao = asset_pack_dao.Asset_pack_DAO(database_defs.ASSET_PACK_TABLE_NAME)
+    def __init__(self):
+        self.set_table_names(database_defs.USER_TABLE_NAME, database_defs.ASSET_PACK_TABLE_NAME)
+
+    
+    def set_table_names(self, user_table_name, asset_pack_table_name):
+        self._u_dao = user_dao.User_DAO(user_table_name)
+        self._p_dao = asset_pack_dao.Asset_pack_DAO(asset_pack_table_name)
+
 
     # purchase asset pack reffered by asset_pack_id
     # add the refered assed to user's purchased_asset_packs
