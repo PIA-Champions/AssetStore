@@ -5,7 +5,7 @@ from DAO import base_dao
 from DAO import update_expression
 
 
-class Asset_DAO(base_dao.BaseDAO):
+class Asset_pack_DAO(base_dao.BaseDAO):
     def __init__(self,table_name):
         super().__init__(table_name)
 

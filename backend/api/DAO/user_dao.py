@@ -39,7 +39,7 @@ class User_DAO(base_dao.BaseDAO):
         item = {
             'id':{'S':item_id},
             'name':{'S':item_param['name']},
-            'bought_assets':{'SS':item_param.get('bought_assets', [''])},
+            'purchased_asset_packs':{'SS':item_param.get('purchased_asset_packs', [''])},
             'password':{'S':item_param['password']},
             'hash':{'B':password_fields['hash']},
             'salt':{'B':password_fields['salt']},
@@ -53,10 +53,13 @@ class User_DAO(base_dao.BaseDAO):
     #Format item from reading operations    
     def format_item_from_reading(self,read_item_data):    
         if 'Item' in read_item_data:
+            item = read_item_data['Item']
+            if not item['purchased_asset_packs']:
+                item['purchased_asset_packs']['SS'] = {'SS':['']}
             return  {
-                        'name': read_item_data['Item']['name']['S'],
-                        'password': read_item_data['Item']['password']['S'],
-                        'bought_assets':read_item_data['Item']['bought_assets']['SS']
+                        'name':item['name']['S'],
+                        'password': item['password']['S'],
+                        'purchased_asset_packs':item['purchased_asset_packs']['SS']
                     }
         return None
 
@@ -65,12 +68,12 @@ class User_DAO(base_dao.BaseDAO):
     #Must return update expressions for update operations 
     def create_update_expression(self,item_param):
         expression = update_expression.UpdateExpression(
-            "SET #n = :new_name, #p = :new_password,#b = :new_bought_assets",
-            {"#n": "name", "#p": "password","#b":"bought_assets"},
+            "SET #n = :new_name, #p = :new_password,#b = :new_purchased_asset_packs",
+            {"#n": "name", "#p": "password","#b":"purchased_asset_packs"},
             {
                 ":new_name": {"S": item_param['name']},
                 ":new_password": {"S": item_param['password']},
-                ":new_bought_assets":{"SS":item_param.get('bought_assets', [''])}
+                ":new_purchased_asset_packs":{"SS":item_param.get('purchased_asset_packs', [''])}
             }
         )
         return expression
