@@ -30,10 +30,11 @@ class Asset_pack_DAO(base_dao.BaseDAO):
     #Format item from reading operations    
     def format_item_from_reading(self,read_item_data):
         return  {
-                    'title': read_item_data['Item']['title']['S'],
-                    'description': read_item_data['Item']['description']['S'],
-                    'web_address': read_item_data['Item']['web_address']['S']
-                }
+            'title': read_item_data['title']['S'],
+            'description': read_item_data['description']['S'],
+            'web_address': read_item_data['web_address']['S'],
+            'id': read_item_data['id']['S']
+        }
 
     #[IMPLEMENTATION] 
     #Create update expressions
