@@ -38,13 +38,13 @@ class Purchase_Controller:
             'purchased_asset_packs': purchased_asset_packs
         }
 
-        self._u_dao.update(user_id,user_update_data)
+        self._u_dao.update_item(user_id,user_update_data)
         return return_values.SUCCESS
 
     # Return a list of asset packs ids purchased by the user
     # May also return 
     # ITEM_NOT_FOUND: USER
-    def list_purchased(self,user_id):        
+    def get_purchased_list(self,user_id):        
         user_data = self._u_dao.read_item(user_id)
         
         if not self._u_dao.validate_item(user_data):

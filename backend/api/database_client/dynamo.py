@@ -40,13 +40,15 @@ def get_table_status(table_name):
 #    TIME_OUT
 #    SUCCESS
 def wait_table_active(table_name):
-    timeout = 10
+    timeout = 30
     sleep = 2
     start_time = time.time()
     status = get_table_status(table_name) 
     if status ==  return_values.TABLE_NOT_FOUND:
         return status
+    print('\n Waiting table to be active\n ')
     while status != "ACTIVE" :
+        print('.', end=' ',flush=True)
         time.sleep(sleep)
         if time.time() - start_time > timeout:
             return return_values.TIME_OUT
@@ -58,11 +60,13 @@ def wait_table_active(table_name):
 #   TIME_OUT
 #   SUCCESS
 def wait_table_vanish(table_name):
-    timeout = 10
+    timeout = 30
     sleep = 2
     start_time = time.time()
     table = check_table_existence(table_name)
+    print('\n Waiting table to be erased\n')
     while table:
+        print('.', end=' ',flush=True)
         table = check_table_existence(table_name)         
         time.sleep(sleep)
         if time.time() - start_time > timeout:

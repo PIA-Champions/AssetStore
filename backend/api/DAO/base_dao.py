@@ -103,14 +103,16 @@ class BaseDAO:
     #Wait for an iten to exist with given values
     #Useful for checking update operation
     #returns True or False
-    def wait_item_status(self, item_id, expected_values):
-        max_retries = 10  
+    def wait_item_status(self, item_id):
+        max_retries = 30 
         retries = 0
+        print('\n Waiting for writing\n')
         while retries < max_retries:
+            print('.', end=' ',flush=True)
             item = self.db_instance.client.get_item(TableName=self.table_name, Key={"id": {"S": item_id}})
             if 'Item' in item:
                 mapped_values = self.format_item_from_reading(item)
-                if mapped_values == expected_values:
+                if self.validate_item(mapped_values):
                     return True 
             time.sleep(5)
             retries += 1
@@ -140,7 +142,7 @@ class BaseDAO:
             error = str(e)
             print(error)
             return str(e)
-        if self.wait_item_status(id,item_param):
+        if self.wait_item_status(id):
             return id
         else:
             return return_values.ERROR + ": Writing not successfull"
@@ -188,7 +190,7 @@ class BaseDAO:
                 ExpressionAttributeNames=expression.attribute_names,
                 ExpressionAttributeValues=expression.attribute_values,
             )
-            if self.wait_item_status(item_id,item_param):
+            if self.wait_item_status(item_id):
                 return return_values.SUCCESS
             else:
                 return return_values.ERROR + ": Update not successfull"

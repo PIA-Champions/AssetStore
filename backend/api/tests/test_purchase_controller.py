@@ -13,6 +13,8 @@ class Test_Purchase_Controller:
     _asset_pack_table_name = "test_asset_pack_table"
     _user_table_name = "test_user_table"
 
+    _skip_teardown = False
+
     def setup_class(self):
         print('\n[[Entering setup_class]]\n')
         self._asset_pack_dao = asset_pack_dao.Asset_pack_DAO(self._asset_pack_table_name)
@@ -28,19 +30,21 @@ class Test_Purchase_Controller:
     def test_purchase_asset_pack(self):
         print('\n[[Entering test_purchase_asset_pack]]\n')
         
-        asset_pack_param = {'title': "Packet of sound FX for realistic fps game ",
+        asset_pack_param = {'title': "FPS FX",
                         'description': "Realistic sound effects intended for a contemporary war themed first person shooter",
                         'web_address': "http://www.archive.com/3726746273/Modern_war_Sound_FX.zip"}
         
         user_param = {'name':'Dino da Silva Sauro',
                       'password':"password"
                       }
+                      
         user_id = self._user_dao.create_item(user_param)
         asset_pack_id = self._asset_pack_dao.create_item(asset_pack_param)
 
         self._purchase.purchase(user_id,asset_pack_id)
 
         ret_user = self._user_dao.read_item(user_id)
+
         assert asset_pack_id in ret_user['purchased_asset_packs'],f'Error purchasing asset pack'        
         
         
@@ -48,11 +52,11 @@ class Test_Purchase_Controller:
     def test_list_purchased(self):
         print('\n[[Entering test_list_purchased]]\n')
         
-        asset_pack_param_1 = {'title': "Packet 2D sprites for Candy Crush clone game ",
+        asset_pack_param_1 = {'title': "Candy Crush Sprites",
                         'description': "Pixel art-styled sprites intended for use in a Candy Crush-like game project.",
                         'web_address': "http://www.archive.com/3726746273/candy_crush_sprites.zip"}
         
-        asset_pack_param_2 = {'title': "Set of 3D models for a racing game",
+        asset_pack_param_2 = {'title': "3D Cars",
                         'description': "Includes 25 racing car models in Blender format.",
                         'web_address': "http://www.archive.com/3726746273/Racing_car_models.zip"}
         
@@ -68,7 +72,7 @@ class Test_Purchase_Controller:
         self._purchase.purchase(user_id,asset_pack_id_1)
         self._purchase.purchase(user_id,asset_pack_id_2)
 
-        purchased_list = self._purchase.get_purchased(user_id)
+        purchased_list = self._purchase.get_purchased_list(user_id)
 
         assert asset_pack_id_1 in purchased_list,f'Error listing purchased asset packs'
         assert asset_pack_id_2 in purchased_list,f'Error listing purchased asset packs'
@@ -76,6 +80,11 @@ class Test_Purchase_Controller:
 
     def teardown_class(self):
         print('\n[[Entering teardown_class]]\n')
+        
+        if self._skip_teardown:
+            print('\n Teardown skipped \n')
+            return 
+
         self._user_dao.delete_table()
         self._asset_pack_dao.delete_table()
         

@@ -53,10 +53,13 @@ class User_DAO(base_dao.BaseDAO):
     #Format item from reading operations    
     def format_item_from_reading(self,read_item_data):    
         if 'Item' in read_item_data:
+            item = read_item_data['Item']
+            if not item['purchased_asset_packs']:
+                item['purchased_asset_packs']['SS'] = {'SS':['']}
             return  {
-                        'name': read_item_data['Item']['name']['S'],
-                        'password': read_item_data['Item']['password']['S'],
-                        'purchased_asset_packs':read_item_data['Item']['purchased_asset_packs']['SS']
+                        'name':item['name']['S'],
+                        'password': item['password']['S'],
+                        'purchased_asset_packs':item['purchased_asset_packs']['SS']
                     }
         return None
 
