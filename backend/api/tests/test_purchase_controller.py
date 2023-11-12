@@ -37,7 +37,7 @@ class Test_Purchase_Controller:
         user_param = {'name':'Dino da Silva Sauro',
                       'password':"password"
                       }
-                      
+
         user_id = self._user_dao.create_item(user_param)
         asset_pack_id = self._asset_pack_dao.create_item(asset_pack_param)
 
