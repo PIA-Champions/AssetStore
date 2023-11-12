@@ -16,8 +16,8 @@ function Header() {
                 </Link>
                 <nav>
                     <HeaderLink url="./">Home</HeaderLink>
-                    <HeaderLink url="./login">Login</HeaderLink>
                     <HeaderLink url="./assets">Assets</HeaderLink>
+                    <HeaderLink url="./cadastro">Cadastro</HeaderLink>
                     <HeaderSearch />
                 </nav>
             </header>
@@ -32,8 +32,8 @@ function Header() {
                 </Link>
                 <nav>
                     <HeaderLink url="./">Home</HeaderLink>
-                    <HeaderLink url="./login">Login</HeaderLink>
                     <HeaderLink url="./assets">Assets</HeaderLink>
+                    <HeaderLink url="./cadastro">Cadastro</HeaderLink>
                 </nav>
             </header>
         )

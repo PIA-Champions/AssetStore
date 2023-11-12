@@ -1,0 +1,31 @@
+/* >>> MOBILE <<< */
+.container_form {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 150px;
+}
+
+h1 {
+    color: var(--roxo-escuro);
+    font-family: var(--font);
+    font-weight: 700;
+
+}
+
+/* >>> DESKTOP <<< */
+@media only screen and (min-width: 1280px) {   
+    .container_form {
+        padding: 56px 56px 24px 56px;
+        width: 500px;
+        height: 600px;
+        position: absolute;
+        top: 50%;
+        left: 50%; 
+        transform: translate(-50%, -50%);
+        border-radius: 12px;
+        margin-top: unset;
+        background-color: var(--branco-polar);
+    }
+}

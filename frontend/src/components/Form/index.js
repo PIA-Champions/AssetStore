@@ -3,20 +3,19 @@ import styles from '../Form/form.module.css';
 function FormRegister() {
   return (
     <div className={styles.container}>
-      <div id="form-login">
         <form>
-          <label>Nome</label>
-          <input type="name" id="inputName" name="name" />
+          <label>Nome</label><br/>
+          <input type="name" id="inputName" name="name" placeholder="Username" required/><br/>
 
-          <label>E-mail</label>
-          <input type="email" id="inputEmail" name="email" />
+          <label>E-mail</label><br/>
+          <input type="email" id="inputEmail" name="email" placeholder="Email" required/><br/>
 
-          <label>Password</label>
-          <input type="password" id="inputPassword" name="password" />
+          <label>Password</label><br/>
+          <input type="password" id="inputPassword" name="password" placeholder="Password" required/><br/>
 
-          <button type="submit">Concluir</button>
+          <br/><button id='button-form' type="submit">Concluir</button>
         </form>
-      </div>
+        <h3> Já tem uma conta? <a href=''>Clique aqui.</a></h3>
     </div>
   )
 }
