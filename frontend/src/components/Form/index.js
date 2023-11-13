@@ -15,7 +15,7 @@ function FormRegister() {
 
           <br/><button id='button-form' type="submit">Concluir</button>
         </form>
-        <h3> Já tem uma conta? <a href=''>Clique aqui.</a></h3>
+        <h3> Já tem uma conta? <a href="http://localhost:3000/login">Clique aqui.</a></h3>
     </div>
   )
 }
