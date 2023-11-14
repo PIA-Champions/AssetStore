@@ -21,6 +21,9 @@ h1 {
         width: 500px;
         height: 600px;
         position: absolute;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         top: 50%;
         left: 50%; 
         transform: translate(-50%, -50%);
