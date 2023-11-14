@@ -1,6 +1,10 @@
 {
   "version": "2.0",
   "app_name": "api",
+  "environment_variables": {
+    "TABLE_USER_NAME": "Teste_user",
+    "TABLE_ASSETS_NAME": "Teste_asset_pack"
+  },
   "manage_iam_role": false,
   "iam_role_arn": "arn:aws:iam::992141468735:role/LabRole",
   "stages": {

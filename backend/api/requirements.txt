@@ -3,4 +3,3 @@ chalice
 pytest
 PyJWT
 datetime
-uuid

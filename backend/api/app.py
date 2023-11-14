@@ -1,6 +1,7 @@
 from chalice import Chalice, AuthResponse
-from DAO import user_dao, asset_pack_dao
-from controllers import purchase_controller
+from chalicelib.DAO import user_dao, asset_pack_dao
+#from DAO import user_dao, asset_pack_dao
+from chalicelib.controllers import purchase_controller
 import os
 
 app = Chalice(app_name='api')
