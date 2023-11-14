@@ -163,18 +163,39 @@ class BaseDAO:
                     Key = {'id': {'S': item_id}}
             )
             if 'Item' in response:
-                return self.format_item_from_reading(response)
+                return self.format_item_from_reading(response['Item'])
             else:
                 return return_values.ITEM_NOT_FOUND
         except Exception as e:
             return str(e)
-    
+
     # Update  item 
     # return values:
     # TABLE_NOT_FOUND
     # INVALID_INPUT_DATA
     # ITEM_NOT_FOUND
     # SUCCESS
+
+    def read_all_items(self):
+        if not dynamo.check_table_existence(self.table_name):
+            return return_values.TABLE_NOT_FOUND
+        try:
+            response = self.db_instance.client.scan(
+                    TableName=self.table_name
+                    )
+            if 'Items' in response:
+                normalized_list = []
+                for item in response['Items']:
+                    normalized_item = self.format_item_from_reading(item)
+                    print(type(normalized_item))
+                    normalized_item.pop('web_address', None)
+                    normalized_list.append(normalized_item)
+                return normalized_list
+            return return_values.ITEM_NOT_FOUND
+        except Exception as e:
+            return str(e)
+
+
     def update_item(self,item_id,item_param):
         if not dynamo.check_table_existence(self.table_name):
             return return_values.TABLE_NOT_FOUND

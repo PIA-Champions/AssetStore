@@ -1,23 +1,20 @@
 from chalice import Chalice, AuthResponse
-from DAO import user_dao
+from DAO import user_dao, asset_pack_dao
+from controllers import purchase_controller
+import os
 
 app = Chalice(app_name='api')
+
+TABLE_USER_NAME = os.getenv('TABLE_USER_NAME')
+TABLE_ASSETS_NAME = os.getenv('TABLE_ASSETS_NAME')
 
 @app.route('/')
 def index():
     return {'Bem vindo a aplicação': 'GameAssetsStore'}
-#Apenas um teste
-
-@app.route('/user/create', methods=['POST'])
-def user_create_table():
-    dao = user_dao.User_DAO('Teste_user')
-    response = dao.create_table()
-    print(response)
-    return {'Bem vindo a aplicação': 'GameAssetsStore'}
 
 @app.route('/register', methods=['POST'])
 def user_register():
-    dao = user_dao.User_DAO('Teste_user')
+    dao = user_dao.User_DAO(TABLE_USER_NAME)
     body = app.current_request.json_body
     response = dao.create_item(body)
     print(response)
@@ -25,22 +22,23 @@ def user_register():
 
 @app.route('/login', methods=['POST'])
 def login():
-    dao = user_dao.User_DAO('Teste_user')
+    dao = user_dao.User_DAO(TABLE_USER_NAME)
     body = app.current_request.json_body
     response = dao.user_login(body['name'], body['password'])
 
-    jwt_token = dao.get_jwt_token(body['name'], body['password'])
-    
-    return {'Response': response , 'Token': jwt_token}
+    return {'Response': response , 'Token': response}
 
 
 @app.authorizer()
 def jwt_auth(auth_request):
-    dao = user_dao.User_DAO('Teste_user')
+    dao = user_dao.User_DAO(TABLE_USER_NAME)
     token = auth_request.token
     decoded = dao.decode_jwt_token(token)
-    print(decoded)
-    return AuthResponse(routes=['*'], principal_id=decoded['sub'])
+    try:
+        return AuthResponse(routes=['*'], principal_id=decoded['sub'])
+    except:
+        return {'Response': 'Invalid token'}
+
 
 """
     if token is None:
@@ -52,6 +50,39 @@ def jwt_auth(auth_request):
 def get_authorized_username(current_request):
     return current_request.context['authorizer']['principalId']
 
-@app.route('/assets', methods=['GET'], authorizer=jwt_auth)
+@app.route('/assets', methods=['GET'])
 def get_assets():
+    dao = asset_pack_dao.Asset_pack_DAO(TABLE_ASSETS_NAME)
+    response = dao.read_all_items()
+    return {'Response': response}
+
+@app.route('/assets', methods=['POST'])
+def create_asset():
+    dao = asset_pack_dao.Asset_pack_DAO(TABLE_ASSETS_NAME)
+    body = app.current_request.json_body
+    response = dao.create_item(body)
+    return {'Response': response}
+
+
+@app.route('/assets/{asset_id}', methods=['GET'], authorizer=jwt_auth)
+def get_asset():
+    
     return {'Bem vindo a aplicação': 'GameAssetsStore'}
+
+
+@app.route('/asset/{asset_id}/purchase', methods=['POST'], authorizer=jwt_auth)
+def buy_assets(asset_id):
+
+    userdao = user_dao.User_DAO(TABLE_USER_NAME)
+    userId = userdao.create_item_id({ "name": app.current_request.context['authorizer']['principalId']})
+    purchase = purchase_controller.Purchase_Controller()
+    response = purchase.purchase(userId, asset_id)
+    return {'Response': response}
+
+#Utilizado anteriormente para criar a tabela de assets
+@app.route('/create_table', methods=['POST'])
+def create_table():
+    dao = asset_pack_dao.Asset_pack_DAO(TABLE_ASSETS_NAME)
+    response = dao.create_table()
+    print(response)
+    return {'Response': response}

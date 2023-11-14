@@ -52,16 +52,36 @@ class User_DAO(base_dao.BaseDAO):
     #[IMPLEMENTATION] 
     #Format item from reading operations    
     def format_item_from_reading(self,read_item_data):    
+
+        print(read_item_data)
         if 'Item' in read_item_data:
             item = read_item_data['Item']
-            if not item['purchased_asset_packs']:
-                item['purchased_asset_packs']['SS'] = {'SS':['']}
-            return  {
-                        'name':item['name']['S'],
-                        'password': item['password']['S'],
-                        'purchased_asset_packs':item['purchased_asset_packs']['SS']
-                    }
-        return None
+        else:
+            item = read_item_data
+
+        if not item['purchased_asset_packs']:
+            item['purchased_asset_packs']['SS'] = ['']
+        
+        return {
+            'name':item['name']['S'],
+            'password': item['password']['S'],
+            'purchased_asset_packs':item['purchased_asset_packs']['SS']
+        }
+
+
+#Atualizado para compensar a já retirada do Item no input do método
+
+#       if 'Item' in read_item_data:
+#            item = read_item_data['Item']
+#            if not item['purchased_asset_packs']:
+#                item['purchased_asset_packs']['SS'] = {'SS':['']}
+#            return  {
+#                        'name':item['name']['S'],
+#                        'password': item['password']['S'],
+#                        'purchased_asset_packs':item['purchased_asset_packs']['SS']
+#                    }
+#        return None
+
 
     #[IMPLEMENTATION] 
     #Create update expressions
@@ -107,7 +127,16 @@ class User_DAO(base_dao.BaseDAO):
                 }
                 hashed = self.encode_password(password, password_fields['salt'])
                 if hashed['hashed'] == password_fields['hashed']:
-                    return return_values.SUCCESS
+                    now = datetime.datetime.utcnow()
+                    unique_id = str(uuid.uuid4())
+                    payload = {
+                        'sub': username,
+                        'iat': now,
+                        'nbf': now,
+                        'jti': unique_id,
+                    }
+
+                    return jwt.encode(payload, 'secret', algorithm='HS256')
                 else:
                     return return_values.INVALID_INPUT_DATA
             else:
@@ -115,28 +144,9 @@ class User_DAO(base_dao.BaseDAO):
         except Exception as e:
             return str(e)
 
-    def get_jwt_token(self,username, password):
-
-        user_id = data_util.create_hash(username)
-
-        db_record = self.read_user(user_id)
-
-        actual = hashlib.pbkdf2_hmac(db_record['hash']['B'].decode('utf-8'), password.encode('utf-8'), db_record['salt']['B'], int(db_record['rounds']['N']))
-
-        expected = db_record['hashed']['B']
-
-        if hmac.compare_digest(actual, expected):
-            now = datetime.datetime.utcnow()
-            unique_id = str(uuid.uuid4())
-            payload = {
-                'sub': username,
-                'iat': now,
-                'nbf': now,
-                'jti': unique_id,
-            }
-            return jwt.encode(payload, 'secret', algorithm='HS256')
-        return return_values.INVALID_USER_OR_PASSWORD
-
     def decode_jwt_token(self,token):
-        return jwt.decode(token, 'secret', algorithms=['HS256'])
-    
+        try:
+            return jwt.decode(token, 'secret', algorithms=['HS256'])
+        except Exception as e:
+            return str(e)
+
