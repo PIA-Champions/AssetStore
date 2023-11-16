@@ -94,6 +94,7 @@ class TestAsset_pack_DAO:
             response = self._dao.read_item(asset_pack_id)
             
             assert response == {
+                'id':asset_pack_id,
                 'title':asset_pack_param['title'],
                 'description':asset_pack_param['description'],
                 'web_address':asset_pack_param['web_address']
