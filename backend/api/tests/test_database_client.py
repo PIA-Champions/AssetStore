@@ -1,7 +1,7 @@
 import boto3
 from botocore.client import BaseClient
 import pytest
-from database_client import dynamo
+from chalicelib.database_client import dynamo
 
 class TestDynamoInstance:
 

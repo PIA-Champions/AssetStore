@@ -1,9 +1,9 @@
 import pytest
-from DAO import asset_pack_dao
-from DAO import user_dao 
-from controllers import purchase_controller
-from util import data_util
-from definitions import return_values
+from chalicelib.DAO import asset_pack_dao
+from chalicelib.DAO import user_dao 
+from chalicelib.controllers import purchase_controller
+from chalicelib.util import data_util
+from chalicelib.definitions import return_values
 import boto3
 import time
 

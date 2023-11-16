@@ -1,7 +1,7 @@
 import pytest
-from DAO import user_dao as dao
-from util import data_util
-from definitions import return_values
+from chalicelib.DAO import user_dao as dao
+from chalicelib.util import data_util
+from chalicelib.definitions import return_values
 import boto3
 import time
 
