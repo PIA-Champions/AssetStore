@@ -44,7 +44,6 @@ class Test_Purchase_Controller:
         self._purchase.purchase(user_id,asset_pack_id)
 
         ret_user = self._user_dao.read_item(user_id)
-
         assert asset_pack_id in ret_user['purchased_asset_packs'],f'Error purchasing asset pack'        
         
         
@@ -73,7 +72,7 @@ class Test_Purchase_Controller:
         self._purchase.purchase(user_id,asset_pack_id_2)
 
         purchased_list = self._purchase.get_purchased_list(user_id)
-
+        
         assert asset_pack_id_1 in purchased_list,f'Error listing purchased asset packs'
         assert asset_pack_id_2 in purchased_list,f'Error listing purchased asset packs'
         

@@ -19,28 +19,26 @@ class Purchase_Controller:
     def purchase(self,user_id,asset_pack_id):
         
         user_data = self._u_dao.read_item(user_id)
-        print(user_data)
-        asset_pack_data = self._p_dao.read_item(asset_pack_id) 
-        """
         if not self._u_dao.validate_item(user_data):
             return return_values.ITEM_NOT_FOUND + ': USER'
+        
+        purchased_asset_packs = user_data.get('purchased_asset_packs',[])
+        
+        for purchased in purchased_asset_packs:
+            if purchased == asset_pack_id:
+                return return_values.ITEM_ALREADY_PURCHASED
+
+        asset_pack_data = self._p_dao.read_item(asset_pack_id) 
         if not self._p_dao.validate_item(asset_pack_data):
             return return_values.ITEM_NOT_FOUND + ': ASSET_PACK' 
-"""
-        purchased_asset_packs = user_data.get('purchased_asset_packs',[])
 
+        
         # [TODO] Prossess purchasing business rules 
         
         purchased_asset_packs.append(asset_pack_id)
-
-        for purchased_assets in purchased_asset_packs:
-            if purchased_assets == asset_pack_id:
-                return return_values.ITEM_ALREADY_PURCHASED
-
-        user_update_data= {
-            'purchased_asset_packs': purchased_asset_packs
-        }
-
+        user_update_data = user_data
+        user_update_data['purchased_asset_packs'] = purchased_asset_packs
+        
         self._u_dao.update_item(user_id,user_update_data)
         return return_values.SUCCESS
 
