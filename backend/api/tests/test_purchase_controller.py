@@ -4,14 +4,15 @@ from chalicelib.DAO import user_dao
 from chalicelib.controllers import purchase_controller
 from chalicelib.util import data_util
 from chalicelib.definitions import return_values
+from chalicelib.definitions import database_defs
 import boto3
 import time
 
 class Test_Purchase_Controller:
     _asset_pack_dao = None
     _user_dao = None
-    _asset_pack_table_name = "test_asset_pack_table"
-    _user_table_name = "test_user_table"
+    _asset_pack_table_name = database_defs.get_test_tables()['user_table']
+    _user_table_name = database_defs.get_test_tables()['asset_packet_table']
 
     _skip_teardown = False
 
