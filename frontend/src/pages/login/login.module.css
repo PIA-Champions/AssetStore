@@ -1,5 +1,5 @@
 /* >>> MOBILE <<< */
-.container_cadastro {
+.container_login {
     padding: 24px;
     display: flex;
     flex-direction: column;
@@ -16,10 +16,10 @@ h1 {
 
 /* >>> DESKTOP <<< */
 @media only screen and (min-width: 1280px) {   
-    .container_cadastro {
+    .container_login {
         padding: 56px 56px 24px 56px;
         width: 500px;
-        height: 600px;
+        height: 400px;
         position: absolute;
         display: flex;
         flex-direction: column;

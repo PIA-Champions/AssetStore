@@ -1,12 +1,9 @@
-import FormRegister from "../../components/Form/index.js";
+import FormRegister from "../../components/FormCadastro/index.js";
 import styles from "./cadastro.module.css";
-// import Header from "../../components/Header";
-
 
 function Cadastro() {
     return (
-        <div className={styles.container_form}>
-            {/* <Header /> */} 
+        <div className={styles.container_cadastro}>
             <h1>Cadastrar</h1> 
             <FormRegister />
         </div>
