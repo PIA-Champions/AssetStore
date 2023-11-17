@@ -55,7 +55,6 @@ class User_DAO(base_dao.BaseDAO):
     #Format item from reading operations    
     def format_item_from_reading(self,read_item_data):    
 
-        print(read_item_data)
         if 'Item' in read_item_data:
             item = read_item_data['Item']
         else:

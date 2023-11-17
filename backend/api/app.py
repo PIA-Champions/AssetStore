@@ -1,13 +1,18 @@
 from chalice import Chalice, AuthResponse
 from chalicelib.DAO import user_dao, asset_pack_dao
-#from DAO import user_dao, asset_pack_dao
 from chalicelib.controllers import purchase_controller
-import os
+from chalicelib.definitions import database_defs
 
 app = Chalice(app_name='api')
 
-TABLE_USER_NAME = os.getenv('TABLE_USER_NAME')
-TABLE_ASSETS_NAME = os.getenv('TABLE_ASSETS_NAME')
+#Read table names from enviromnent variables
+#"Here, we are not using the Python 'os' library to read environment variables.
+#'database_defs.Table_Defs' allows us to standardize the names of environment variables for both production and testing.
+
+table_defs = database_defs.Table_Defs()
+table_names = table_defs.get_public_table_names()  
+TABLE_USER_NAME = table_names['user_table']
+TABLE_ASSETS_NAME =  table_names['asset_packet_table']
 
 @app.route('/')
 def index():

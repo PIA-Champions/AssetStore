@@ -1,13 +1,15 @@
 import pytest
-from DAO import asset_pack_dao as dao
-from util import data_util
-from definitions import return_values
+from chalicelib.DAO import asset_pack_dao as dao
+from chalicelib.util import data_util
+from chalicelib.definitions import return_values,database_defs
 import boto3
 import time
 
 class TestAsset_pack_DAO:
     _SLEEP = 10
-    _asset_pack_table_name = "Test_asset_pack_Table"
+    table_defs = database_defs.Table_Defs()
+    table_names = table_defs.get_test_table_names()
+    _asset_pack_table_name = table_names['asset_packet_table']
     _dao = None
 
     @classmethod
@@ -53,8 +55,9 @@ class TestAsset_pack_DAO:
         
     #asset_pack_DAO must create a table that should be accessible by boto3
     def setup_class(self):
-        self._dao = dao.Asset_pack_DAO(self._asset_pack_table_name)
         print('\n[[Entering setup_class]]\n')
+        print(self._asset_pack_table_name)
+        self._dao = dao.Asset_pack_DAO(self._asset_pack_table_name)
         ret_value = self._dao.create_table()
         print('create_asset_pack_table: '+ ret_value)
         table_status = self._get_table_status() 
@@ -94,6 +97,7 @@ class TestAsset_pack_DAO:
             response = self._dao.read_item(asset_pack_id)
             
             assert response == {
+                'id':asset_pack_id,
                 'title':asset_pack_param['title'],
                 'description':asset_pack_param['description'],
                 'web_address':asset_pack_param['web_address']

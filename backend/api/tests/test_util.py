@@ -1,5 +1,5 @@
 import pytest
-from util import data_util 
+from chalicelib.util import data_util 
 
 # Test string-to hash generation
 def test_create_hash():
