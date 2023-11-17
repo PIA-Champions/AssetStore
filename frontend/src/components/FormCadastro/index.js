@@ -1,90 +1,104 @@
-import styles from './form.module.css';
+import styles from '../FormCadastro/form.module.css';
+import {useState} from 'react';
 
-function FormRegister() {
+export default function FormRegister() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState(false);
+
+  const handleName = (event) => {
+    setName(event.target.value);
+    setSubmitted(false);
+  }
+
+  const handleEmail = (event) => {
+    setEmail(event.target.value);
+    setSubmitted(false);
+  }
+
+  const handlePassword = (event) => {
+    setPassword(event.target.value);
+    setSubmitted(false);
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (name === '' || email === '' || password === '') {
+      setError(true);
+    } else {
+      try {
+        fetch('https://ckf9b5do98.execute-api.us-east-1.amazonaws.com/api/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          mode: "cors",
+          body: JSON.stringify({
+            name: name,
+//            email: email,
+            password: password
+          })
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.Response === "ITEM_ALREADY_EXISTS") {
+              setError(true);
+            }
+            console.log(data.Response);
+          })
+          .catch(error => {
+            console.error(error);
+          });
+
+      } catch (error) {
+        setError(true); 
+        console.log(error);
+      }
+
+      setSubmitted(true);
+      setError(false);
+    }
+  }
+
+  const successMessage = () => {
+    return (
+      <div className={styles.success}>
+        <h3>Conta criada com sucesso!</h3>
+      </div>
+    )
+  }
+
+  const errorMessage = () => {
+    return (
+      <div className={styles.error}>
+        <h3>Por favor, preencha todos os campos.</h3>
+      </div>
+    )
+  }
+
   return (
     <div className={styles.container}>
-        <form>
-          <label>Nome</label><br/>
-          <input type="name" id="inputName" name="name" placeholder="Username" required/><br/>
+      <form onSubmit={handleSubmit}>
+        <label>Nome</label><br/>
+        <input type="name" id="inputName" name="name" placeholder="Username" value={name} onChange={handleName} required/><br/>
 
-          <label>E-mail</label><br/>
-          <input type="email" id="inputEmail" name="email" placeholder="Email" required/><br/>
+        <label>E-mail</label><br/>
+        <input type="email" id="inputEmail" name="email" placeholder="Email" value={email} onChange={handleEmail} required/><br/>
 
-          <label>Password</label><br/>
-          <input type="password" id="inputPassword" name="password" placeholder="Password" required/><br/>
+        <label>Password</label><br/>
+        <input type="password" id="inputPassword" name="password" placeholder="Password" value={password} onChange={handlePassword} required/><br/>
 
-          <br/><button id='button-form' type="submit">Concluir</button>
-        </form>
-        <h3> Já tem uma conta? <a href="./login">Clique aqui.</a></h3>
+        <br/><button id='button-form' type="submit">Concluir</button>
+      </form>
+      <h3> Já tem uma conta? <a href="http://localhost:3000/login">Clique aqui.</a></h3>
+      {submitted && successMessage()}
+      {error && errorMessage()}
     </div>
+  
   )
 }
-
-export default FormRegister;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// https://www.webdevdrops.com/react-forms-validacao-react-hook-form/
-// export default FormRegister;
-
-// import React from "react";
-// import { useForm } from "react-hook-form";
-// import "./LoginForm.css";
-
-// const LoginForm = () => {
-//   const { register, handleSubmit, errors } = useForm();
-
-//   function onSubmit(data) {
-//     console.log("Data submitted: ", data);
-//   }
-
-//   return (
-//     <div className="login-form">
-//       <form onSubmit={handleSubmit(onSubmit)} noValidate>
-//         <label htmlFor="inputEmail">E-mail</label>
-//         <input
-//           type="email"
-//           id="inputEmail"
-//           name="email"
-//           ref={register({
-//             required: "Enter your e-mail",
-//             pattern: {
-//               value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-//               message: "Enter a valid e-mail address",
-//             },
-//           })}
-//         />
-//         {errors.email && <p className="error">{errors.email.message}</p>}
-
-//         <label htmlFor="inputPassword">Password</label>
-//         <input
-//           type="password"
-//           id="inputPassword"
-//           name="password"
-//           ref={register({ required: "Enter your password" })}
-//         />
-//         {errors.password && <p className="error">{errors.password.message}</p>}
-
-//         <button type="submit">Login</button>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default LoginForm;
