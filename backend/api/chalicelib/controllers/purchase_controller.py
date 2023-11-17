@@ -1,9 +1,12 @@
 from chalicelib.DAO import user_dao,asset_pack_dao
 from chalicelib.definitions import database_defs, return_values
+
 class Purchase_Controller:
     def __init__(self):
-        user_table_Name = database_defs.get_public_tables()['user_table']
-        asset_packet_table_name = database_defs.get_public_tables()['asset_packet_table']
+        table_defs = database_defs.Table_Defs()
+        table_names = table_defs.get_public_table_names()
+        user_table_name = table_names['user_table']
+        asset_packet_table_name = table_names['asset_packet_table']
         self.set_table_names(user_table_name, asset_packet_table_name)
 
     

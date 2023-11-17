@@ -1,13 +1,15 @@
 import pytest
 from chalicelib.DAO import user_dao as dao
 from chalicelib.util import data_util
-from chalicelib.definitions import return_values
+from chalicelib.definitions import return_values,database_defs
 import boto3
 import time
 
 class TestUserDAO:
     _SLEEP = 10
-    _user_table_name = "TestUserTable"
+    table_defs = database_defs.Table_Defs()
+    table_names = table_defs.get_test_table_names()
+    _user_table_name = table_names['user_table']
     _dao = None
 
     @classmethod

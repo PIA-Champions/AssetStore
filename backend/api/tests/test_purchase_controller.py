@@ -11,8 +11,12 @@ import time
 class Test_Purchase_Controller:
     _asset_pack_dao = None
     _user_dao = None
-    _asset_pack_table_name = database_defs.get_test_tables()['user_table']
-    _user_table_name = database_defs.get_test_tables()['asset_packet_table']
+
+    table_defs = database_defs.Table_Defs()
+    table_names = table_defs.get_test_table_names()
+    
+    _user_table_name = table_names['user_table']
+    _asset_pack_table_name = table_names['asset_packet_table']
 
     _skip_teardown = False
 

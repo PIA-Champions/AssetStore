@@ -1,13 +1,15 @@
 from chalice import Chalice, AuthResponse
 from chalicelib.DAO import user_dao, asset_pack_dao
 from chalicelib.controllers import purchase_controller
-from chalicelib.definitions import Database_Defs
+from chalicelib.definitions import database_defs
 import os
 
 app = Chalice(app_name='api')
 
-TABLE_USER_NAME = Database_Defs.get_public_tables()['user_table']
-TABLE_ASSETS_NAME = Database_Defs.get_public_tables()['asset_pack_table']
+table_defs = database_defs.Table_Defs()
+public_table_names = table_defs.get_public_table_names()  
+TABLE_USER_NAME = public_table_names['user_table']
+TABLE_ASSETS_NAME =  public_table_names['asset_pack_table']
 
 @app.route('/')
 def index():
