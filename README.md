@@ -30,4 +30,4 @@ The "Asset Packs" table manages information about various asset packs available 
 - **Store Media List:** A list of dictionaries that describe media content that is used for presentation of the asset pack on the store. Each dictionary has the folowing format:
 
     ```markdown
-    {'file_address':'The url for the media file','type':'tumbnail'} 
+    {'web_address':'The url for the media file','type':'tumbnail'} 
