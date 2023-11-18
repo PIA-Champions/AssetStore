@@ -18,11 +18,23 @@ class Asset_pack_DAO(base_dao.BaseDAO):
     # Format item for writing operations 
     #Must be implemented by derivative class
     def format_item_for_writing(self,item_id,item_param):
+        formated_store_media = []
+        store_media = item_param['store_media'] 
+        if store_media:
+            for media in store_media:
+                formated_media = {'M':{
+                    'web_address':{'S':media['web_address']},
+                    'type':{'S':media['type']}
+                    }}
+                formated_store_media.append(formated_media)
+        
         item = {
             'id':{'S':item_id},
             'title':{'S':item_param['title']},
             'description':{'S':item_param['description']},
-            'web_address':{'S':item_param['web_address']}
+            'web_address':{'S':item_param['web_address']},
+            'store_media':{'L':formated_store_media},
+
         }
         return item
 

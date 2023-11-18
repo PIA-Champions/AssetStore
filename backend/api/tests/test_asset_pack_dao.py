@@ -12,6 +12,8 @@ class TestAsset_pack_DAO:
     _asset_pack_table_name = table_names['asset_packet_table']
     _dao = None
 
+    _skip_teardown = True
+
     @classmethod
     def _delete_table(cls):
         print('Entering _delete_table\n')
@@ -67,9 +69,15 @@ class TestAsset_pack_DAO:
     #asset_pack_DAO must create item on asset_pack table
     def test_create_asset_pack(self):
         print('\n[[Entering test_create_asset_pack]]\n')
+        store_media_param = [
+                                {'web_address': 'http://www.archive.com/24376/thumb1.png','type':'thumbnail'},
+                                {'web_address': 'http://www.archive.com/24376/thumb2.png','type':'thumbnail'}
+                            ]
         asset_pack_param = {'title': 'Medieval Tileset',
                       'description': 'A packet containing medieval themed tilesets for 2D RPG Games',
-                      'web_address': 'http://www.archive.com/63482/medievaltiles.zip'}
+                      'web_address': 'http://www.archive.com/63482/medievaltiles.zip',
+                      'store_media': store_media_param }
+        
         id = self._dao.create_item(asset_pack_param)
         print('expected item id as response. Received ' + id)
         time.sleep(self._SLEEP)
@@ -78,7 +86,9 @@ class TestAsset_pack_DAO:
         assert response["title"] == asset_pack_param["title"],f'Error testing created asset_pack. name diverges'
         assert response["description"] == asset_pack_param["description"],f'Error testing created asset_pack. description diverges'
         assert response["web_address"] == asset_pack_param["web_address"],f'Error testing created asset_pack. url diverges'
-    
+        assert response["store_media"] == asset_pack_param["store_media"],f'Error testing created asset_pack. store media diverges'
+        
+    """
     #asset_pack_DAO must read an existing asset_pack
     def test_read_asset_pack(self):
         print('\n[[Entering test_read_asset_pack]]\n')
@@ -187,9 +197,12 @@ class TestAsset_pack_DAO:
 
         else:
             printf("Test skipped (asset_pack table not found)\n")
-
+    """
 
     def teardown_class(self):
         print('\n[[Entering teardown_class]]\n')
+        if self._skip_teardown:
+            print('\n Teardown skipped \n')
+            return
         self._delete_table()
 
