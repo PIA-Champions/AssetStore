@@ -42,16 +42,28 @@ class Asset_pack_DAO(base_dao.BaseDAO):
     #Format item from reading operations    
     def format_item_from_reading(self,read_item_data):
         
+        store_media = []
+
         if 'Item' in read_item_data:
             item = read_item_data['Item']
         else:
             item = read_item_data
+        
+        if 'store_media' in read_item_data:
+            read_store_media = item['store_media']['L']     
+            if read_store_media:
+                for media in read_store_media:
+                    store_media.append({
+                    'web_address':media['M']['web_address']['S'],
+                    'type':media['M']['type']['S']
+                    }) 
 
         return  {
             'title': item['title']['S'],
             'description': item['description']['S'],
             'web_address': item['web_address']['S'],
-            'id': item['id']['S']
+            'id': item['id']['S'],
+            'store_media':store_media
         }
 
     #[IMPLEMENTATION] 
