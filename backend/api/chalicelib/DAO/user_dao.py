@@ -70,20 +70,6 @@ class User_DAO(base_dao.BaseDAO):
         }
 
 
-#Atualizado para compensar a já retirada do Item no input do método
-
-#       if 'Item' in read_item_data:
-#            item = read_item_data['Item']
-#            if not item['purchased_asset_packs']:
-#                item['purchased_asset_packs']['SS'] = {'SS':['']}
-#            return  {
-#                        'name':item['name']['S'],
-#                        'password': item['password']['S'],
-#                        'purchased_asset_packs':item['purchased_asset_packs']['SS']
-#                    }
-#        return None
-
-
     #[IMPLEMENTATION] 
     #Create update expressions
     #Must return update expressions for update operations 
