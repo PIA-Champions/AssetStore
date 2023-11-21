@@ -12,7 +12,7 @@ class TestAsset_pack_DAO:
     _asset_pack_table_name = table_names['asset_packet_table']
     _dao = None
 
-    _skip_teardown = True
+    _skip_teardown = False
 
     @classmethod
     def _delete_table(cls):
@@ -41,13 +41,14 @@ class TestAsset_pack_DAO:
         return item
 
     @classmethod
-    def _create_table_item(cls,name,description,url):
+    def _create_table_item(cls,name,description,url,store_media):
         table = cls._get_table()
         if table:
             asset_pack_param = {
                             'title': name,
                             'description': description,
-                            'web_address': url
+                            'web_address': url,
+                            'store_media':store_media
                         }
             
             asset_pack_id = cls._dao.create_item(asset_pack_param)
@@ -88,20 +89,28 @@ class TestAsset_pack_DAO:
         assert response["web_address"] == asset_pack_param["web_address"],f'Error testing created asset_pack. url diverges'
         assert response["store_media"] == asset_pack_param["store_media"],f'Error testing created asset_pack. store media diverges'
         
-    """
+
     #asset_pack_DAO must read an existing asset_pack
     def test_read_asset_pack(self):
         print('\n[[Entering test_read_asset_pack]]\n')
         table = self._get_table()
         if table:
+            store_media_param = [
+                                {'web_address': 'http://www.archive.com/24376/thumb1.png','type':'thumbnail'},
+                                {'web_address': 'http://www.archive.com/24376/thumb2.png','type':'thumbnail'}
+                            ]
+        
             asset_pack_param = {
                 'title':'Spaceship sprites',
                 'description':'2D top down spaceship sprites',
-                'web_address':'http://www.archive.com/68758sfs850/2dSpaceships.zip'
+                'web_address':'http://www.archive.com/68758sfs850/2dSpaceships.zip',
+                'store_media': store_media_param
             }
             asset_pack_id = self._create_table_item(asset_pack_param['title'],
                                 asset_pack_param['description'],
-                                asset_pack_param['web_address'])
+                                asset_pack_param['web_address'],
+                                asset_pack_param['store_media'])
+                                
             assert asset_pack_id != return_values.TABLE_NOT_FOUND,f'Error creating item before deletion'
             
             response = self._dao.read_item(asset_pack_id)
@@ -110,11 +119,12 @@ class TestAsset_pack_DAO:
                 'id':asset_pack_id,
                 'title':asset_pack_param['title'],
                 'description':asset_pack_param['description'],
-                'web_address':asset_pack_param['web_address']
+                'web_address':asset_pack_param['web_address'],
+                'store_media':store_media_param
             },f'Error reading asset_pack. Incorrect response'
         else:
             print("Test skipped (asset_pack Table not found)\n")    
-
+    """
     #asset_pack_DAO must update an existing asset_pack
     def test_update_asset_pack(self):
         print('\n[[Entering test_update_asset_pack]]\n')
