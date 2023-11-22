@@ -41,7 +41,7 @@ class TestAsset_pack_DAO:
         return item
 
     @classmethod
-    def _create_table_item(cls,name,description,url,store_media):
+    def _create_table_item(cls,name,description,url,store_media = []):
         table = cls._get_table()
         if table:
             asset_pack_param = {
@@ -156,7 +156,7 @@ class TestAsset_pack_DAO:
             }
             
             result = self._dao.update_item(asset_pack_id,updated_item_param)
-            print(result)
+
             assert result == return_values.SUCCESS,f'Error testing asset_pack update. Incorrect response'
             
             response = self._get_table_item(asset_pack_id)
@@ -175,7 +175,8 @@ class TestAsset_pack_DAO:
         if table:
             asset_pack_id = self._create_table_item('Spaceship sprites',
                                 '2D top down spaceship sprites',
-                                'http://www.archive.com/68758sfs850/2dSpaceships.zip')
+                                'http://www.archive.com/68758sfs850/2dSpaceships.zip',
+                                )
             assert asset_pack_id != return_values.TABLE_NOT_FOUND,f'Error: item not created (TABLE NOT FOUND)'
             result = self._dao.delete_item(asset_pack_id)
             assert result == return_values.SUCCESS,f'Error testing delete asset_pack. Incorrect response'
