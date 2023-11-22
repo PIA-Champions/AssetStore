@@ -110,7 +110,7 @@ class TestAsset_pack_DAO:
                                 asset_pack_param['description'],
                                 asset_pack_param['web_address'],
                                 asset_pack_param['store_media'])
-                                
+
             assert asset_pack_id != return_values.TABLE_NOT_FOUND,f'Error creating item before deletion'
             
             response = self._dao.read_item(asset_pack_id)
@@ -124,30 +124,47 @@ class TestAsset_pack_DAO:
             },f'Error reading asset_pack. Incorrect response'
         else:
             print("Test skipped (asset_pack Table not found)\n")    
-    """
+    
     #asset_pack_DAO must update an existing asset_pack
     def test_update_asset_pack(self):
         print('\n[[Entering test_update_asset_pack]]\n')
         table = self._get_table()
         if table:
+            
+            store_media_param = [
+                                {'web_address': 'http://www.archive.com/24376/thumb1.png','type':'thumbnail'},
+                                {'web_address': 'http://www.archive.com/24376/thumb2.png','type':'thumbnail'}
+                            ]
+        
             asset_pack_id = self._create_table_item('Spaceship sprites',
                                 '2D top down spaceship sprites',
-                                'http://www.archive.com/68758sfs850/2dSpaceships.zip')
+                                'http://www.archive.com/68758sfs850/2dSpaceships.zip',
+                                 store_media_param)
+                    
             assert asset_pack_id != return_values.TABLE_NOT_FOUND,f'Error creating item before deletion'
+            
+            updated_store_media_param = [
+                                {'web_address': 'http://www.archive.com/update24376/updated_thumb1.png','type':'thumbnail'},
+                                {'web_address': 'http://www.archive.com/update24376/updated_thumb2.png','type':'thumbnail'}
+                            ]
+
             updated_item_param = {
                 'title':'2D city textures',
                 'description':'Set of realistic textures for urban locations',
-                'web_address':'http://www.archive.com/68758850/urban_textures.zip'
+                'web_address':'http://www.archive.com/68758850/urban_textures.zip',
+                'store_media': updated_store_media_param
             }
             
             result = self._dao.update_item(asset_pack_id,updated_item_param)
+            print(result)
             assert result == return_values.SUCCESS,f'Error testing asset_pack update. Incorrect response'
             
             response = self._get_table_item(asset_pack_id)
             assert response['title'] == updated_item_param['title'], f'asset_pack name not properly updated '
             assert response['description'] == updated_item_param['description'], f'asset_pack description not properly updated'
             assert response['web_address'] == updated_item_param['web_address'], f'asset_pack url not properly updated'
-            
+            assert response['store_media'] == updated_item_param['store_media'], f'asset_pack store_media not properly updated'
+
         else:
             print("Test skipped (asset_pack Table not found)\n")
 
@@ -207,7 +224,6 @@ class TestAsset_pack_DAO:
 
         else:
             printf("Test skipped (asset_pack table not found)\n")
-    """
 
     def teardown_class(self):
         print('\n[[Entering teardown_class]]\n')

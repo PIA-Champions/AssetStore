@@ -70,13 +70,22 @@ class Asset_pack_DAO(base_dao.BaseDAO):
     #Create update expressions
     #Must return update expressions for update operations 
     def create_update_expression(self,item_param):
+        formated_store_media = []        
+        store_media = item_param.get('store_media',[])
+        for media in store_media:
+            formated_store_media.append({"M":{
+                'web_address':{"S":media['web_address']},
+                'type':{"S":media['type']}
+            }}) 
+
         expression = update_expression.UpdateExpression(
-            "SET #t = :new_title, #d = :new_description,#w = :new_web_address",
-            {"#t": "title", "#d": "description", "#w":"web_address"},
+            "SET #t = :new_title, #d = :new_description,#w = :new_web_address,#stm = :new_store_media",
+            {"#t": "title", "#d": "description", "#w":"web_address","#stm":"store_media"},
             {
                 ":new_title": {"S": item_param['title']},
                 ":new_description": {"S": item_param['description']},
                 ":new_web_address": {"S": item_param['web_address']},
+                ":new_store_media":{"L":formated_store_media}
             }
         )
         return expression
