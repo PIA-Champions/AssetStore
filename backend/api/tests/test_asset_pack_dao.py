@@ -81,14 +81,35 @@ class TestAsset_pack_DAO:
         
         id = self._dao.create_item(asset_pack_param)
         print('expected item id as response. Received ' + id)
-        time.sleep(self._SLEEP)
+        
         response = self._get_table_item(id)
         print(response)
+        
         assert response["title"] == asset_pack_param["title"],f'Error testing created asset_pack. name diverges'
         assert response["description"] == asset_pack_param["description"],f'Error testing created asset_pack. description diverges'
         assert response["web_address"] == asset_pack_param["web_address"],f'Error testing created asset_pack. url diverges'
         assert response["store_media"] == asset_pack_param["store_media"],f'Error testing created asset_pack. store media diverges'
+
+    #It must be possible to omit store media durint asset pack creation
+    def test_create_asset_pack_without_store_media(self):
+        print('\n[[Entering test_create_asset_pack_without_store_media]]\n')
+        asset_pack_param = {'title': 'Epic music',
+                      'description': 'A packet 7 mp3 tracks of symphonic epic themes',
+                      'web_address': 'http://www.archive.com/6348dfsj2/Ephic_suit_music.zip'
+                        }
         
+        id = self._dao.create_item(asset_pack_param)
+        print('expected item id as response. Received ' + id)
+
+        response = self._get_table_item(id)
+        print(response)
+        
+        assert response["title"] == asset_pack_param["title"],f'Error testing created asset_pack. name diverges'
+        assert response["description"] == asset_pack_param["description"],f'Error testing created asset_pack. description diverges'
+        assert response["web_address"] == asset_pack_param["web_address"],f'Error testing created asset_pack. url diverges'
+        assert response["store_media"] == [],f'Error testing created asset_pack. store media diverges'
+
+
 
     #asset_pack_DAO must read an existing asset_pack
     def test_read_asset_pack(self):
