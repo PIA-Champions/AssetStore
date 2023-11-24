@@ -49,7 +49,7 @@ class Asset_pack_DAO(base_dao.BaseDAO):
             item = read_item_data
         
         if 'store_media' in read_item_data:
-            read_store_media = item['store_media']['L']     
+            read_store_media = item['store_media'].get('L',None)    
             if read_store_media:
                 for media in read_store_media:
                     store_media.append({

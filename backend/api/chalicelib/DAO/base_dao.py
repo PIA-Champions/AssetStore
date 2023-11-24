@@ -18,7 +18,7 @@ class BaseDAO:
     #Create id for a item
     #Must be implemented by derivative class
     def create_item_id(self,item_param):
-        #Example: 
+        #Example implementation: 
         #return data_util.create_hash(item_param['name']) 
         return None
 
