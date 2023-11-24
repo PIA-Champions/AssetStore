@@ -18,11 +18,22 @@ class Asset_pack_DAO(base_dao.BaseDAO):
     # Format item for writing operations 
     #Must be implemented by derivative class
     def format_item_for_writing(self,item_id,item_param):
+        formated_store_media = []
+        store_media = item_param.get('store_media',[]) 
+        for media in store_media:
+            formated_media = {'M':{
+                'web_address':{'S':media['web_address']},
+                'type':{'S':media['type']}
+                }}
+            formated_store_media.append(formated_media)
+    
         item = {
             'id':{'S':item_id},
             'title':{'S':item_param['title']},
             'description':{'S':item_param['description']},
-            'web_address':{'S':item_param['web_address']}
+            'web_address':{'S':item_param['web_address']},
+            'store_media':{'L':formated_store_media},
+
         }
         return item
 
@@ -30,29 +41,50 @@ class Asset_pack_DAO(base_dao.BaseDAO):
     #Format item from reading operations    
     def format_item_from_reading(self,read_item_data):
         
+        store_media = []
+
         if 'Item' in read_item_data:
             item = read_item_data['Item']
         else:
             item = read_item_data
+        
+        if 'store_media' in read_item_data:
+            read_store_media = item['store_media'].get('L',None)    
+            if read_store_media:
+                for media in read_store_media:
+                    store_media.append({
+                    'web_address':media['M']['web_address']['S'],
+                    'type':media['M']['type']['S']
+                    }) 
 
         return  {
             'title': item['title']['S'],
             'description': item['description']['S'],
             'web_address': item['web_address']['S'],
-            'id': item['id']['S']
+            'id': item['id']['S'],
+            'store_media':store_media
         }
 
     #[IMPLEMENTATION] 
     #Create update expressions
     #Must return update expressions for update operations 
     def create_update_expression(self,item_param):
+        formated_store_media = []        
+        store_media = item_param.get('store_media',[])
+        for media in store_media:
+            formated_store_media.append({"M":{
+                'web_address':{"S":media['web_address']},
+                'type':{"S":media['type']}
+            }}) 
+
         expression = update_expression.UpdateExpression(
-            "SET #t = :new_title, #d = :new_description,#w = :new_web_address",
-            {"#t": "title", "#d": "description", "#w":"web_address"},
+            "SET #t = :new_title, #d = :new_description,#w = :new_web_address,#stm = :new_store_media",
+            {"#t": "title", "#d": "description", "#w":"web_address","#stm":"store_media"},
             {
                 ":new_title": {"S": item_param['title']},
                 ":new_description": {"S": item_param['description']},
                 ":new_web_address": {"S": item_param['web_address']},
+                ":new_store_media":{"L":formated_store_media}
             }
         )
         return expression
