@@ -1,7 +1,14 @@
-from chalice import Chalice, AuthResponse
+from chalice import Chalice, AuthResponse, CORSConfig
 from chalicelib.DAO import user_dao, asset_pack_dao
 from chalicelib.controllers import purchase_controller
 from chalicelib.definitions import database_defs
+
+cors_config = CORSConfig(
+    allow_origin='*',
+    allow_headers=['Content-Type', 'X-Amz-Date', 'Authorization', 'X-Api-Key', 'X-Amz-Security-Token', 'Authorization'],
+    max_age=600,
+    allow_credentials=True
+)
 
 app = Chalice(app_name='api')
 
@@ -18,7 +25,7 @@ TABLE_ASSETS_NAME =  table_names['asset_packet_table']
 def index():
     return {'Bem vindo a aplicação': 'GameAssetsStore'}
 
-@app.route('/register', methods=['POST'])
+@app.route('/register', methods=['POST'], cors=cors_config)
 def user_register():
     dao = user_dao.User_DAO(TABLE_USER_NAME)
     body = app.current_request.json_body
@@ -26,7 +33,7 @@ def user_register():
     print(response)
     return {'Response': response}
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['POST'], cors=cors_config)
 def login():
     dao = user_dao.User_DAO(TABLE_USER_NAME)
     body = app.current_request.json_body
