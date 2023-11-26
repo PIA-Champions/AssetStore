@@ -1,5 +1,6 @@
 import styles from "../FormLogin/FormLogin.module.css";
 import {useState} from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
 function FormLogin() {
@@ -7,6 +8,24 @@ function FormLogin() {
     const [password, setPassword] = useState('');
     const [submitted, setSubmitted] = useState(false);
     const [error, setError] = useState(false);
+    const navigate = useNavigate();
+    const successMessage = () => {
+        return (
+            <div className={styles.success}>
+                <p>Usuário logado com sucesso!</p>
+            </div>
+        )
+    }
+
+    const errorMessage = () => {
+        return (
+            <div className={styles.error}>
+                <p>Usuário ou senha inválidos!</p>
+            </div>
+        )
+    }
+
+
 
     const handleName = (event) => {
         setName(event.target.value);
@@ -42,13 +61,16 @@ function FormLogin() {
                 .then(response => response.json())
                 .then(data => {
                     console.log(data.Response)
-                    if (data.Response === "ITEM_ALREADY_EXISTS") {
+                    if (data.Response === "INVALID_INPUT_DATA") {
                         setError(true);
                     }
                     else {
+                        const token = data.Token;
+                        sessionStorage.setItem("assetsToken", token);
                         setSubmitted(true);
                         setError(false);
-                    }
+                        navigate('/');
+                      }
                 })
                 .catch(error => {
                     console.error(error);
@@ -72,6 +94,8 @@ function FormLogin() {
 
           <br/><button id='button-login' type="submit">Entrar</button>
         </form>
+        {submitted && successMessage()}
+        {error && errorMessage()}
     </div>
     );
 } 
