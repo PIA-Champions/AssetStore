@@ -49,7 +49,10 @@ export default function FormRegister() {
             if (data.Response === "ITEM_ALREADY_EXISTS") {
               setError(true);
             }
-            console.log(data.Response);
+            else {
+              setSubmitted(true);
+              setError(false);
+            }
           })
           .catch(error => {
             console.error(error);
@@ -60,8 +63,8 @@ export default function FormRegister() {
         console.log(error);
       }
 
-      setSubmitted(true);
-      setError(false);
+//      setSubmitted(true);
+//      setError(false);
     }
   }
 
