@@ -7,7 +7,7 @@ function Cadastro() {
             <h1>Cadastrar</h1> 
             <FormRegister />
         </div>
-    )
+    );
 }
 
 export default Cadastro;
