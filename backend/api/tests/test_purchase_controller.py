@@ -1,17 +1,22 @@
 import pytest
-from DAO import asset_pack_dao
-from DAO import user_dao 
-from controllers import purchase_controller
-from util import data_util
-from definitions import return_values
+from chalicelib.DAO import asset_pack_dao
+from chalicelib.DAO import user_dao 
+from chalicelib.controllers import purchase_controller
+from chalicelib.util import data_util
+from chalicelib.definitions import return_values
+from chalicelib.definitions import database_defs
 import boto3
 import time
 
 class Test_Purchase_Controller:
     _asset_pack_dao = None
     _user_dao = None
-    _asset_pack_table_name = "test_asset_pack_table"
-    _user_table_name = "test_user_table"
+
+    table_defs = database_defs.Table_Defs()
+    table_names = table_defs.get_test_table_names()
+    
+    _user_table_name = table_names['user_table']
+    _asset_pack_table_name = table_names['asset_packet_table']
 
     _skip_teardown = False
 
@@ -44,7 +49,6 @@ class Test_Purchase_Controller:
         self._purchase.purchase(user_id,asset_pack_id)
 
         ret_user = self._user_dao.read_item(user_id)
-
         assert asset_pack_id in ret_user['purchased_asset_packs'],f'Error purchasing asset pack'        
         
         
@@ -73,7 +77,7 @@ class Test_Purchase_Controller:
         self._purchase.purchase(user_id,asset_pack_id_2)
 
         purchased_list = self._purchase.get_purchased_list(user_id)
-
+        
         assert asset_pack_id_1 in purchased_list,f'Error listing purchased asset packs'
         assert asset_pack_id_2 in purchased_list,f'Error listing purchased asset packs'
         

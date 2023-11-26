@@ -1,13 +1,15 @@
 import pytest
-from DAO import user_dao as dao
-from util import data_util
-from definitions import return_values
+from chalicelib.DAO import user_dao as dao
+from chalicelib.util import data_util
+from chalicelib.definitions import return_values,database_defs
 import boto3
 import time
 
 class TestUserDAO:
     _SLEEP = 10
-    _user_table_name = "TestUserTable"
+    table_defs = database_defs.Table_Defs()
+    table_names = table_defs.get_test_table_names()
+    _user_table_name = table_names['user_table']
     _dao = None
 
     @classmethod
@@ -79,7 +81,28 @@ class TestUserDAO:
         print(response)
         assert response["name"] == user_param["name"],f'Error testing created user. name diverges'
         assert response["password"] == user_param["password"],f'Error testing created user. password diverges'
+        assert response['purchased_asset_packs'] == user_param['purchased_asset_packs'],f'Error testing created user. purchased_asset_packs diverges'
     
+    # It must be possible to omit purchased assets suring user creation. 
+    def test_create_user_without_purchased(self):
+        print('\n[[Entering test_create_user_without_purchased]]\n')
+        
+        user_param = {
+                'name':'Baby da Silva Sauro',
+                'password':'naoeamamae'
+            }
+
+        user_id = self._dao.create_item(user_param)
+        assert user_id != return_values.TABLE_NOT_FOUND,f'Error creating user (table not found)'
+        
+        response = self._get_table_item(user_id)
+        print(response)
+        
+        assert response["name"] == user_param["name"],f'Error testing created user. name diverges'
+        assert response["password"] == user_param["password"],f'Error testing created user. password diverges'
+        assert response["purchased_asset_packs"] == [''],f'Error testing created user. purchased_asset_packs diverges'
+    
+
     #User_DAO must read an existing user
     def test_read_user(self):
         print('\n[[Entering test_read_user]]\n')
