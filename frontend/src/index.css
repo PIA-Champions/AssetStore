@@ -1,13 +1,23 @@
+:root {
+  --font: 'Montserrat', sans-serif;
+  --roxo-escuro: #151426;
+  --roxo-medio: #010440;
+  --roxo: #323673;
+  --roxo-claro: #6A6DA6;
+  --branco-polar: #F0F1F2;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: var(--font);
+  background: rgb(222,225,228);
+  background: radial-gradient(circle, rgba(222,225,228,1) 0%, rgba(240,241,242,1) 50%, rgba(222,225,228,1) 100%);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* overflow-y: scroll;
+    overflow-x: hidden; */
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: var(--font);
 }

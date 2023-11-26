@@ -1,0 +1,52 @@
+/* >>> MOBILE <<< */
+.header a {
+    text-decoration: none;
+}
+
+.header h1 {
+    text-align: center;
+    padding: 1.4em 1.4em 0 1.4em;
+    color: var(--roxo-escuro);
+}
+
+.header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 3.0em 0 3.0em;
+    bottom: 100px;
+    color: #323673;
+}
+
+/* >>> TABLET <<< */
+@media only screen and (min-width: 768px) {
+    .header nav {
+        padding: 0 12em 0 12em;
+        width: 500px;
+    }
+}
+
+/* >>> DESKTOP <<< */
+@media only screen and (min-width: 1280px) {    
+    .header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .header h1 {
+        width: 7em;
+        padding: 1em 1em 0 1em;
+    }
+
+    .header nav {
+        width: 500px;
+        padding: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 2em;
+        margin-right: 5em;
+    } 
+}
