@@ -33,7 +33,7 @@ def user_register():
     print(response)
     return {'Response': response}
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['POST'], cors=cors_config)
 def login():
     dao = user_dao.User_DAO(TABLE_USER_NAME)
     body = app.current_request.json_body
