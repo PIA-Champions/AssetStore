@@ -6,7 +6,7 @@ function HeaderLink({url, children}) {
         <Link to={url} className={styles.link}>
             {children}
         </Link>
-    )
+    );
 }
 
 export default HeaderLink;

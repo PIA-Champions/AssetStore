@@ -10,7 +10,7 @@ function HeaderSearch() {
             </span>
             </button>
         </div>
-    )
+    );
 }
 
 export default HeaderSearch;

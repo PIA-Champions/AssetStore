@@ -1,5 +1,5 @@
 import styles from '../FormCadastro/form.module.css';
-import {useState} from 'react';
+import { useState } from 'react';
 
 export default function FormRegister() {
   const [name, setName] = useState('');
@@ -40,7 +40,7 @@ export default function FormRegister() {
           mode: "cors",
           body: JSON.stringify({
             name: name,
-//            email: email,
+            //email: email,
             password: password
           })
         })
@@ -59,12 +59,12 @@ export default function FormRegister() {
           });
 
       } catch (error) {
-        setError(true); 
+        setError(true);
         console.log(error);
       }
 
-//      setSubmitted(true);
-//      setError(false);
+      //setSubmitted(true);
+      //setError(false);
     }
   }
 
@@ -73,7 +73,7 @@ export default function FormRegister() {
       <div className={styles.success}>
         <h3>Conta criada com sucesso!</h3>
       </div>
-    )
+    );
   }
 
   const errorMessage = () => {
@@ -81,27 +81,26 @@ export default function FormRegister() {
       <div className={styles.error}>
         <h3>Por favor, preencha todos os campos.</h3>
       </div>
-    )
+    );
   }
 
   return (
     <div className={styles.container}>
       <form onSubmit={handleSubmit}>
-        <label>Nome</label><br/>
-        <input type="name" id="inputName" name="name" placeholder="Username" value={name} onChange={handleName} required/><br/>
+        <label>Nome</label><br />
+        <input type="name" id="inputName" name="name" placeholder="Username" value={name} onChange={handleName} required /><br />
 
-        <label>E-mail</label><br/>
-        <input type="email" id="inputEmail" name="email" placeholder="Email" value={email} onChange={handleEmail} required/><br/>
+        <label>E-mail</label><br />
+        <input type="email" id="inputEmail" name="email" placeholder="Email" value={email} onChange={handleEmail} required /><br />
 
-        <label>Password</label><br/>
-        <input type="password" id="inputPassword" name="password" placeholder="Password" value={password} onChange={handlePassword} required/><br/>
+        <label>Password</label><br />
+        <input type="password" id="inputPassword" name="password" placeholder="Password" value={password} onChange={handlePassword} required /><br />
 
-        <br/><button id='button-form' type="submit">Concluir</button>
+        <br /><button id='button-form' type="submit">Concluir</button>
       </form>
       <h3> Já tem uma conta? <a href="http://localhost:3000/login">Clique aqui.</a></h3>
       {submitted && successMessage()}
       {error && errorMessage()}
     </div>
-  
-  )
+  );
 }
