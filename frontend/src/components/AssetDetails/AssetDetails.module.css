@@ -11,7 +11,7 @@
     align-items: center;
 }
 
-.card_container, h1 {
+.card_container, .card_container h1 {
     color: var(--branco-polar);
 }
 
