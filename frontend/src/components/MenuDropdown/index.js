@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import styles from "./MenuDropdown.module.css"
+import styles from "./MenuDropdown.module.css";
 
 function MenuDropdown() {
     return (
