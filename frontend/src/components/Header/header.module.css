@@ -22,12 +22,16 @@
 @media only screen and (min-width: 768px) {
     .header nav {
         padding: 0 12em 0 12em;
-        width: 500px;
+        width: 700px;
     }
 }
 
 /* >>> DESKTOP <<< */
-@media only screen and (min-width: 1280px) {    
+@media only screen and (min-width: 1280px) {   
+    nav {
+        width: 700px;
+    }
+    
     .header {
         display: flex;
         flex-direction: row;
@@ -41,7 +45,6 @@
     }
 
     .header nav {
-        width: 500px;
         padding: 0;
         display: flex;
         justify-content: space-between;
