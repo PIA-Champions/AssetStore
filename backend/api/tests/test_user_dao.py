@@ -33,17 +33,17 @@ class TestUserDAO:
         return return_values.TABLE_NOT_FOUND
 
     @classmethod
-    def _create_table_item(cls,name,password,purchased_asset_packs):
+    def _create_table_item(cls,name,password,purchased_asset_packs,balance='0.0'):
         table = cls._get_table()
         if table:
             user_param = {
                             'name': name,
                             'password': password,
-                            'purchased_asset_packs': purchased_asset_packs
+                            'purchased_asset_packs': purchased_asset_packs,
+                            'balance':balance
                         }
             
             user_id = cls._dao.create_item(user_param)
-            
             return user_id
         return return_values.TABLE_NOT_FOUND
 
@@ -72,6 +72,7 @@ class TestUserDAO:
         user_param = {
                 'name':'Dino da Silva Sauro',
                 'password':'123456',
+                'balance':'20.0',
                 'purchased_asset_packs':['']
             }
         user_id = self._dao.create_item(user_param)
@@ -81,6 +82,7 @@ class TestUserDAO:
         print(response)
         assert response["name"] == user_param["name"],f'Error testing created user. name diverges'
         assert response["password"] == user_param["password"],f'Error testing created user. password diverges'
+        assert float(response["balance"]) == float(user_param["balance"]),f'Error testing created user. balance diverges'
         assert response['purchased_asset_packs'] == user_param['purchased_asset_packs'],f'Error testing created user. purchased_asset_packs diverges'
     
     # It must be possible to omit purchased assets suring user creation. 
@@ -100,6 +102,7 @@ class TestUserDAO:
         
         assert response["name"] == user_param["name"],f'Error testing created user. name diverges'
         assert response["password"] == user_param["password"],f'Error testing created user. password diverges'
+        assert response["balance"] == '0','Error testing created user. balance diverges'
         assert response["purchased_asset_packs"] == [''],f'Error testing created user. purchased_asset_packs diverges'
     
 
@@ -111,22 +114,24 @@ class TestUserDAO:
             user_param = {
                 'name':'Fran da Silva Sauro',
                 'password':'mypass',
+                'balance':'10.0',
                 'purchased_asset_packs':['']
             }
             user_id = self._create_table_item(
                 user_param['name'],
                 user_param['password'],
-                user_param['purchased_asset_packs']
+                user_param['purchased_asset_packs'],
+                user_param['balance']
             )
             assert user_id != return_values.TABLE_NOT_FOUND,f'Error creating user (table not found)'
         
             response = self._dao.read_item(user_id)
             
-            assert response == {
-                'name':user_param['name'],
-                'password':user_param['password'],
-                'purchased_asset_packs':user_param['purchased_asset_packs']
-            },f'Error reading user. Incorrect response'
+            assert response["name"] == user_param["name"],f'Error testing created user. name diverges'
+            assert response["password"] == user_param["password"],f'Error testing created user. password diverges'
+            assert float(response["balance"]) == float(user_param['balance']),'Error testing created user. balance diverges'
+            assert response["purchased_asset_packs"] == [''],f'Error testing created user. purchased_asset_packs diverges'
+        
         else:
             print("Test skipped (User Table not found)\n")    
 
@@ -138,17 +143,21 @@ class TestUserDAO:
             user_param = {
                 'name':'Mônica Invertebrada',
                 'password': 'blue',
+                'balance':'10.0',
                 'purchased_asset_packs':['']
             }
             user_id = self._create_table_item(user_param['name'],
                                         user_param['password'],
-                                        user_param['purchased_asset_packs'])
+                                        user_param['purchased_asset_packs'],
+                                        user_param['balance']
+                                        )
             assert user_id != return_values.TABLE_NOT_FOUND,f'Error creating user (table not found)'
         
             updated_item_param = {
                 'name':'Roy Hess',
                 'password':'Brown',
-                'purchased_asset_packs':['']
+                'purchased_asset_packs':[''],
+                'balance':'20.0'
             }
 
             result = self._dao.update_item(user_id,updated_item_param)
@@ -157,6 +166,7 @@ class TestUserDAO:
             response = self._get_table_item(user_id)
             assert response['name'] == updated_item_param['name'], f'user name not properly updated '
             assert response['password'] == updated_item_param['password'], f'user password not properly updated'
+            assert float(response['balance']) == float(updated_item_param['balance']), f'user balance not properly updated'
             assert response['purchased_asset_packs'] == updated_item_param['purchased_asset_packs'], f'user purchased asset_packs not properly updated'
             
         else:
