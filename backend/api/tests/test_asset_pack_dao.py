@@ -41,12 +41,13 @@ class TestAsset_pack_DAO:
         return item
 
     @classmethod
-    def _create_table_item(cls,name,description,url,store_media = []):
+    def _create_table_item(cls,name,description,url,store_media = [],cost = '0.0'):
         table = cls._get_table()
         if table:
             asset_pack_param = {
                             'title': name,
                             'description': description,
+                            'cost':cost,
                             'web_address': url,
                             'store_media':store_media
                         }
@@ -76,6 +77,7 @@ class TestAsset_pack_DAO:
                             ]
         asset_pack_param = {'title': 'Medieval Tileset',
                       'description': 'A packet containing medieval themed tilesets for 2D RPG Games',
+                      'cost':'2.00',
                       'web_address': 'http://www.archive.com/63482/medievaltiles.zip',
                       'store_media': store_media_param }
         
@@ -87,6 +89,7 @@ class TestAsset_pack_DAO:
         
         assert response["title"] == asset_pack_param["title"],f'Error testing created asset_pack. name diverges'
         assert response["description"] == asset_pack_param["description"],f'Error testing created asset_pack. description diverges'
+        assert float(response["cost"]) == float(asset_pack_param["cost"]),f'Error testing created asset_pack. cost diverges'
         assert response["web_address"] == asset_pack_param["web_address"],f'Error testing created asset_pack. url diverges'
         assert response["store_media"] == asset_pack_param["store_media"],f'Error testing created asset_pack. store media diverges'
 
@@ -106,6 +109,7 @@ class TestAsset_pack_DAO:
         
         assert response["title"] == asset_pack_param["title"],f'Error testing created asset_pack. name diverges'
         assert response["description"] == asset_pack_param["description"],f'Error testing created asset_pack. description diverges'
+        assert float(response["cost"]) == 0.0,f'Error testing created asset_pack. cost diverges'
         assert response["web_address"] == asset_pack_param["web_address"],f'Error testing created asset_pack. url diverges'
         assert response["store_media"] == [],f'Error testing created asset_pack. store media diverges'
 
@@ -124,25 +128,26 @@ class TestAsset_pack_DAO:
             asset_pack_param = {
                 'title':'Spaceship sprites',
                 'description':'2D top down spaceship sprites',
+                'cost':'3.0',
                 'web_address':'http://www.archive.com/68758sfs850/2dSpaceships.zip',
                 'store_media': store_media_param
             }
             asset_pack_id = self._create_table_item(asset_pack_param['title'],
                                 asset_pack_param['description'],
                                 asset_pack_param['web_address'],
-                                asset_pack_param['store_media'])
+                                asset_pack_param['store_media'],
+                                asset_pack_param['cost'])
 
             assert asset_pack_id != return_values.TABLE_NOT_FOUND,f'Error creating item before deletion'
             
             response = self._dao.read_item(asset_pack_id)
             
-            assert response == {
-                'id':asset_pack_id,
-                'title':asset_pack_param['title'],
-                'description':asset_pack_param['description'],
-                'web_address':asset_pack_param['web_address'],
-                'store_media':store_media_param
-            },f'Error reading asset_pack. Incorrect response'
+            assert response["title"] == asset_pack_param["title"],f'Error testing created asset_pack. name diverges'
+            assert response["description"] == asset_pack_param["description"],f'Error testing created asset_pack. description diverges'
+            assert float(response["cost"]) == float(asset_pack_param["cost"]),f'Error testing created asset_pack. cost diverges'
+            assert response["web_address"] == asset_pack_param["web_address"],f'Error testing created asset_pack. url diverges'
+            assert response["store_media"] == store_media_param,f'Error testing created asset_pack. store media diverges'
+
         else:
             print("Test skipped (asset_pack Table not found)\n")    
     
@@ -160,7 +165,8 @@ class TestAsset_pack_DAO:
             asset_pack_id = self._create_table_item('Spaceship sprites',
                                 '2D top down spaceship sprites',
                                 'http://www.archive.com/68758sfs850/2dSpaceships.zip',
-                                 store_media_param)
+                                 store_media_param,
+                                 '1.0')
                     
             assert asset_pack_id != return_values.TABLE_NOT_FOUND,f'Error creating item before deletion'
             
@@ -172,6 +178,7 @@ class TestAsset_pack_DAO:
             updated_item_param = {
                 'title':'2D city textures',
                 'description':'Set of realistic textures for urban locations',
+                'cost':'1.5',
                 'web_address':'http://www.archive.com/68758850/urban_textures.zip',
                 'store_media': updated_store_media_param
             }
@@ -183,6 +190,7 @@ class TestAsset_pack_DAO:
             response = self._get_table_item(asset_pack_id)
             assert response['title'] == updated_item_param['title'], f'asset_pack name not properly updated '
             assert response['description'] == updated_item_param['description'], f'asset_pack description not properly updated'
+            assert float(response['cost']) == float(updated_item_param['cost']), f'asset_pack description not properly updated'
             assert response['web_address'] == updated_item_param['web_address'], f'asset_pack url not properly updated'
             assert response['store_media'] == updated_item_param['store_media'], f'asset_pack store_media not properly updated'
 
