@@ -189,8 +189,6 @@ class BaseDAO:
                 normalized_list = []
                 for item in response['Items']:
                     normalized_item = self.format_item_from_reading(item)
-                    print(type(normalized_item))
-                    normalized_item.pop('web_address', None)
                     normalized_list.append(normalized_item)
                 return normalized_list
             return return_values.ITEM_NOT_FOUND

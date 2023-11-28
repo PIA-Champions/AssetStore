@@ -214,15 +214,15 @@ class TestAsset_pack_DAO:
             asset_pack_id1 = self._create_table_item('name 1',
                                 'description 1',
                                 'url 1')
-            assert asset_pack_id1 != return_values.TABLE_NOT_FOUND,f'Error creating item before deletion'
+            assert asset_pack_id1 != return_values.TABLE_NOT_FOUND,f'Error creating item'
             asset_pack_id2 = self._create_table_item('name 2',
                                 'description 2',
                                 'url 2')
-            assert asset_pack_id2 != return_values.TABLE_NOT_FOUND,f'Error creating item before deletion'
+            assert asset_pack_id2 != return_values.TABLE_NOT_FOUND,f'Error creating item'
             asset_pack_id3 = self._create_table_item('name 3',
                                 'description 3',
                                 'url 3')
-            assert asset_pack_id3 != return_values.TABLE_NOT_FOUND,f'Error creating item before deletion'
+            assert asset_pack_id3 != return_values.TABLE_NOT_FOUND,f'Error creating item'
             
             test_result1 = self._dao.search_itens_by_keyword("name 1",{'title','description','web_address'})
             print(test_result1)
@@ -244,6 +244,34 @@ class TestAsset_pack_DAO:
             print('\n')
             assert test_result4['Count']==3
 
+        else:
+            printf("Test skipped (asset_pack table not found)\n")
+
+    # It must be possible to return a list with all asset packs
+    def test_list_all(self):
+        print('\n[[Entering test_list_all]]\n')
+        table = self._get_table()
+        if table:
+            asset_pack_id1 = self._create_table_item('test_list_all name 1',
+                                'description test_list_all1',
+                                'url test_list_all1')
+            assert asset_pack_id1 != return_values.TABLE_NOT_FOUND,f'Error creating item'
+            asset_pack_id2 = self._create_table_item(' test_list_allname 2',
+                                'description test_list_all2',
+                                'url test_list_all2')
+            assert asset_pack_id2 != return_values.TABLE_NOT_FOUND,f'Error creating item'
+            asset_pack_id3 = self._create_table_item('test_list_all name 3',
+                                'description test_list_all3',
+                                'url test_list_all3')
+            assert asset_pack_id3 != return_values.TABLE_NOT_FOUND,f'Error creating item'
+            
+            result = self._dao.read_all_items()
+            for item in result:
+                print(item)
+                print("\n ... \n")
+                assert 'title' in item,f'Could not fint title in returned item'
+                assert 'description' in item,f'Could not fint description in returned item'
+                
         else:
             printf("Test skipped (asset_pack table not found)\n")
 
