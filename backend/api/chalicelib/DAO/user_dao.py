@@ -40,16 +40,15 @@ class User_DAO(base_dao.BaseDAO):
         password_fields = self.encode_password(item_param['password'])
         item = {
             'id':{'S':item_id},
-            'name':{'S':item_param.get('name',''},
+            'name':{'S':item_param.get('name','')},
             'purchased_asset_packs':{'SS':item_param.get('purchased_asset_packs', [''])},
             'password':{'S':item_param.get('password','')},
-            'balance':{'N':item_param.get('balance',0)}
+            'balance':{'N':item_param.get('balance','0.0')},
             'hash':{'B':password_fields['hash']},
             'salt':{'B':password_fields['salt']},
             'rounds':{'N':str(password_fields['rounds'])},
             'hashed':{'B':password_fields['hashed']}
-            
-        }
+            }
         return item
 
     #[IMPLEMENTATION] 
