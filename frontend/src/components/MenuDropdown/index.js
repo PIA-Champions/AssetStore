@@ -8,6 +8,7 @@ function MenuDropdown() {
             <div className={styles.dropdown_content}>
                 <Link to="./cadastro">Cadastro</Link>
                 <Link to="./login">Login</Link>
+                <Link to="./editar">Editar dados</Link>
             </div>
         </div>
     );
