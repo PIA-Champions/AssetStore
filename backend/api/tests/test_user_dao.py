@@ -33,17 +33,10 @@ class TestUserDAO:
         return return_values.TABLE_NOT_FOUND
 
     @classmethod
-    def _create_table_item(cls,name,password,purchased_asset_packs,balance='0.0'):
+    def _create_table_item(cls,item_param):
         table = cls._get_table()
         if table:
-            user_param = {
-                            'name': name,
-                            'password': password,
-                            'purchased_asset_packs': purchased_asset_packs,
-                            'balance':balance
-                        }
-            
-            user_id = cls._dao.create_item(user_param)
+            user_id = cls._dao.create_item(item_param)
             return user_id
         return return_values.TABLE_NOT_FOUND
 
@@ -117,12 +110,7 @@ class TestUserDAO:
                 'balance':'10.0',
                 'purchased_asset_packs':['']
             }
-            user_id = self._create_table_item(
-                user_param['name'],
-                user_param['password'],
-                user_param['purchased_asset_packs'],
-                user_param['balance']
-            )
+            user_id = self._create_table_item(user_param)
             assert user_id != return_values.TABLE_NOT_FOUND,f'Error creating user (table not found)'
         
             response = self._dao.read_item(user_id)
@@ -146,11 +134,7 @@ class TestUserDAO:
                 'balance':'10.0',
                 'purchased_asset_packs':['']
             }
-            user_id = self._create_table_item(user_param['name'],
-                                        user_param['password'],
-                                        user_param['purchased_asset_packs'],
-                                        user_param['balance']
-                                        )
+            user_id = self._create_table_item(user_param)
             assert user_id != return_values.TABLE_NOT_FOUND,f'Error creating user (table not found)'
         
             updated_item_param = {
@@ -177,9 +161,11 @@ class TestUserDAO:
         print('\n[[Entering test_delete_user]]\n')
         table = self._get_table()
         if table:
-            user_id = self._create_table_item('Sr. Richfield',
-                                        'TheBo$$',
-                                        [''])
+            user_id = self._create_table_item(
+                                        {'name':'Sr. Richfield',
+                                        'password':'TheBo$$',
+                                        'purchased_asset_packets':['']}
+                                        )
             assert user_id != return_values.TABLE_NOT_FOUND,f'Error creating user (table not found)'
 
             result = self._dao.delete_item(user_id)
