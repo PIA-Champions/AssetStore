@@ -69,6 +69,16 @@ def get_assets():
     response = dao.read_all_items()
     return {'Response': response}
 
+@app.route('/assets/search', methods=['GET'])
+def search_assets():
+    dao = asset_pack_dao.Asset_pack_DAO(TABLE_ASSETS_NAME)
+    keyword = app.current_request.query_params.get('keyword', '')
+    # Define the attributes you want to search on
+    attribute_names = ['title', 'description', 'web_address']  # Add more attributes as needed
+    # Call the search_items_by_keyword method from DAO
+    response = dao.search_items_by_keyword(keyword, attribute_names)
+    return {'Response': response}
+
 @app.route('/assets', methods=['POST'])
 def create_asset():
     dao = asset_pack_dao.Asset_pack_DAO(TABLE_ASSETS_NAME)
