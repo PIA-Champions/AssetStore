@@ -76,7 +76,7 @@ def search_assets():
     # Define the attributes you want to search on
     attribute_names = ['title', 'description', 'web_address']  # Add more attributes as needed
     # Call the search_items_by_keyword method from DAO
-    response = dao.search_items_by_keyword(keyword, attribute_names)
+    response = dao.search_itens_by_keyword(keyword, attribute_names)
     return {'Response': response}
 
 @app.route('/assets', methods=['POST'])
