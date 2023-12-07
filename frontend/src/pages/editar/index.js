@@ -8,15 +8,16 @@ function Editar() {
             <div className={styles.container}>
                 <form>
                     <label>E-mail</label><br />
-                    <input type="name" id="emailEdit" name="name" placeholder="Email"/><br />
+                    <input type="name" id="emailEdit" name="name" placeholder="Email"/><br/>
 
                     <label>Password</label><br />
-                    <input type="password" id="passwordEdit" name="password" placeholder="Password" /><br />
+                    <input type="password" id="passwordEdit" name="password" placeholder="Password"/><br/>
 
                     <label>Balance</label><br />
-                    <input type="password" id="balanceEdit" name="password" placeholder="Balance" /><br />
+                    <input type="number" id="balanceEdit" name="password" placeholder="Balance"/><br/>
+                    <a type="button" className="balanceButton">✔</a>
 
-                    <br /><button id='buttonOk' type="submit">Pronto</button>
+                    <br /><button id="buttonOk" type="submit">Pronto</button>
                 </form>
             </div>
         </div>
