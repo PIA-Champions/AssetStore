@@ -57,6 +57,26 @@ form input {
     padding: 10 0 0 10px;
 }
 
+form input#balanceEdit {
+    width: 210px !important;
+}
+
+.container_edit a.balanceButton {
+    top: 322px;
+    left: 416px;
+    width: 15px;
+    position: absolute;
+    border: 1px solid #D3D3D3;
+    border-radius: 12px;
+    padding: 5px;
+    text-align: center;
+    color: var(--roxo-claro);
+}
+
+.container_edit a.balanceButton:hover {
+    cursor: pointer;
+}
+
 .container_edit button {
     width: 270px;
     height: 42px;
