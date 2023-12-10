@@ -79,7 +79,7 @@ def search_assets():
     response = dao.search_itens_by_keyword(keyword, attribute_names)
     return {'Response': response}
 
-@app.route('/assets', methods=['POST'])
+@app.route('/assets', methods=['POST'], cors=cors_config)
 def create_asset():
     dao = asset_pack_dao.Asset_pack_DAO(TABLE_ASSETS_NAME)
     body = app.current_request.json_body
