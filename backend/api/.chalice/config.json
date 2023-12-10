@@ -6,7 +6,7 @@
     "TABLE_ASSETS_NAME": "Teste_asset_pack"
   },
   "manage_iam_role": false,
-  "iam_role_arn": "arn:aws:iam::992141468735:role/LabRole",
+  "iam_role_arn": "arn:aws:iam::029768847555:role/projetofinaltemp",
   "stages": {
     "dev": {
       "api_gateway_stage": "api"
