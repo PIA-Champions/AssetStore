@@ -1,0 +1,11 @@
+.link {
+    color: var(--roxo-escuro);
+    font-size: 18px;
+}
+
+.link:hover,
+.link:focus {
+    color: var(--roxo-claro);
+    font-size: 20px;
+    font-weight: 700;
+}
