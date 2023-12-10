@@ -1,22 +1,40 @@
 .iwt_container {
+    width: 100vw;
+    height: 60vh;
+    position:absolute;
+    top: 240px;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: center;
     justify-content: center;
-    padding-top: 10%;
+    color: var(--roxo-claro);
+    background-color: var(--roxo-escuro);
 }
 
 .iwt_container p {
-    width: 650px;
+    width: 50vw;
+    font-weight: 500;
     margin-right: 50px;
 }
 
 .iwt_container picture {
-    width: 500px;
-    height: 355px;
+    width: 20vw;
+    height: 20vw;
     background-size: 100%;
     background-repeat: no-repeat;
-    background-image: url("../../../public/imagens/asset-background.jpg");
+    background-image: url("../../../public/imagens/asset-monster.png");
     border-radius: 12px;
+    transform: scale(2.7);
+}
+
+.container_header {
+    overflow:unset;
+}
+
+.container_header h5.footer {
+    width: 100vw;
+    position: absolute;
+    top: 830px;
+    text-align: center;
 }
