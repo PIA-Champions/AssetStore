@@ -63,13 +63,13 @@ def jwt_auth(auth_request):
 def get_authorized_username(current_request):
     return current_request.context['authorizer']['principalId']
 
-@app.route('/assets', methods=['GET'])
+@app.route('/assets', methods=['GET'], cors=cors_config)
 def get_assets():
     dao = asset_pack_dao.Asset_pack_DAO(TABLE_ASSETS_NAME)
     response = dao.read_all_items()
     return {'Response': response}
 
-@app.route('/assets/search', methods=['GET'])
+@app.route('/assets/search', methods=['GET'], cors=cors_config)
 def search_assets():
     dao = asset_pack_dao.Asset_pack_DAO(TABLE_ASSETS_NAME)
     keyword = app.current_request.query_params.get('keyword', '')
@@ -87,13 +87,13 @@ def create_asset():
     return {'Response': response}
 
 
-@app.route('/assets/{asset_id}', methods=['GET'], authorizer=jwt_auth)
+@app.route('/assets/{asset_id}', methods=['GET'], authorizer=jwt_auth, cors=cors_config)
 def get_asset():
     
     return {'Bem vindo a aplicação': 'GameAssetsStore'}
 
 
-@app.route('/asset/{asset_id}/purchase', methods=['POST'], authorizer=jwt_auth)
+@app.route('/asset/{asset_id}/purchase', methods=['POST'], authorizer=jwt_auth, cors=cors_config)
 def buy_assets(asset_id):
 
     userdao = user_dao.User_DAO(TABLE_USER_NAME)
