@@ -63,13 +63,23 @@ def jwt_auth(auth_request):
 def get_authorized_username(current_request):
     return current_request.context['authorizer']['principalId']
 
-@app.route('/assets', methods=['GET'])
+@app.route('/assets', methods=['GET'], cors=cors_config)
 def get_assets():
     dao = asset_pack_dao.Asset_pack_DAO(TABLE_ASSETS_NAME)
     response = dao.read_all_items()
     return {'Response': response}
 
-@app.route('/assets', methods=['POST'])
+@app.route('/assets/search', methods=['GET'], cors=cors_config)
+def search_assets():
+    dao = asset_pack_dao.Asset_pack_DAO(TABLE_ASSETS_NAME)
+    keyword = app.current_request.query_params.get('keyword', '')
+    # Define the attributes you want to search on
+    attribute_names = ['title', 'description', 'web_address']  # Add more attributes as needed
+    # Call the search_items_by_keyword method from DAO
+    response = dao.search_itens_by_keyword(keyword, attribute_names)
+    return {'Response': response}
+
+@app.route('/assets', methods=['POST'], cors=cors_config)
 def create_asset():
     dao = asset_pack_dao.Asset_pack_DAO(TABLE_ASSETS_NAME)
     body = app.current_request.json_body
@@ -77,13 +87,13 @@ def create_asset():
     return {'Response': response}
 
 
-@app.route('/assets/{asset_id}', methods=['GET'], authorizer=jwt_auth)
+@app.route('/assets/{asset_id}', methods=['GET'], authorizer=jwt_auth, cors=cors_config)
 def get_asset():
     
     return {'Bem vindo a aplicação': 'GameAssetsStore'}
 
 
-@app.route('/asset/{asset_id}/purchase', methods=['POST'], authorizer=jwt_auth)
+@app.route('/asset/{asset_id}/purchase', methods=['POST'], authorizer=jwt_auth, cors=cors_config)
 def buy_assets(asset_id):
 
     userdao = user_dao.User_DAO(TABLE_USER_NAME)
@@ -93,9 +103,16 @@ def buy_assets(asset_id):
     return {'Response': response}
 
 #Utilizado anteriormente para criar a tabela de assets
-@app.route('/create_table', methods=['POST'])
+@app.route('/create_table/assets', methods=['POST'])
 def create_table():
     dao = asset_pack_dao.Asset_pack_DAO(TABLE_ASSETS_NAME)
+    response = dao.create_table()
+    print(response)
+    return {'Response': response}
+
+@app.route('/create_table/users', methods=['POST'])
+def create_table():
+    dao = user_dao.User_DAO(TABLE_USER_NAME)
     response = dao.create_table()
     print(response)
     return {'Response': response}

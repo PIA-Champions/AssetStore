@@ -41,17 +41,10 @@ class TestAsset_pack_DAO:
         return item
 
     @classmethod
-    def _create_table_item(cls,name,description,url,store_media = []):
+    def _create_table_item(cls,item_param):
         table = cls._get_table()
         if table:
-            asset_pack_param = {
-                            'title': name,
-                            'description': description,
-                            'web_address': url,
-                            'store_media':store_media
-                        }
-            
-            asset_pack_id = cls._dao.create_item(asset_pack_param)
+            asset_pack_id = cls._dao.create_item(item_param)
             return asset_pack_id
         return return_values.TABLE_NOT_FOUND
 
@@ -76,6 +69,7 @@ class TestAsset_pack_DAO:
                             ]
         asset_pack_param = {'title': 'Medieval Tileset',
                       'description': 'A packet containing medieval themed tilesets for 2D RPG Games',
+                      'cost':'2.00',
                       'web_address': 'http://www.archive.com/63482/medievaltiles.zip',
                       'store_media': store_media_param }
         
@@ -87,6 +81,7 @@ class TestAsset_pack_DAO:
         
         assert response["title"] == asset_pack_param["title"],f'Error testing created asset_pack. name diverges'
         assert response["description"] == asset_pack_param["description"],f'Error testing created asset_pack. description diverges'
+        assert float(response["cost"]) == float(asset_pack_param["cost"]),f'Error testing created asset_pack. cost diverges'
         assert response["web_address"] == asset_pack_param["web_address"],f'Error testing created asset_pack. url diverges'
         assert response["store_media"] == asset_pack_param["store_media"],f'Error testing created asset_pack. store media diverges'
 
@@ -106,6 +101,7 @@ class TestAsset_pack_DAO:
         
         assert response["title"] == asset_pack_param["title"],f'Error testing created asset_pack. name diverges'
         assert response["description"] == asset_pack_param["description"],f'Error testing created asset_pack. description diverges'
+        assert float(response["cost"]) == 0.0,f'Error testing created asset_pack. cost diverges'
         assert response["web_address"] == asset_pack_param["web_address"],f'Error testing created asset_pack. url diverges'
         assert response["store_media"] == [],f'Error testing created asset_pack. store media diverges'
 
@@ -124,25 +120,22 @@ class TestAsset_pack_DAO:
             asset_pack_param = {
                 'title':'Spaceship sprites',
                 'description':'2D top down spaceship sprites',
+                'cost':'3.0',
                 'web_address':'http://www.archive.com/68758sfs850/2dSpaceships.zip',
                 'store_media': store_media_param
             }
-            asset_pack_id = self._create_table_item(asset_pack_param['title'],
-                                asset_pack_param['description'],
-                                asset_pack_param['web_address'],
-                                asset_pack_param['store_media'])
+            asset_pack_id = self._create_table_item(asset_pack_param)
 
             assert asset_pack_id != return_values.TABLE_NOT_FOUND,f'Error creating item before deletion'
             
             response = self._dao.read_item(asset_pack_id)
             
-            assert response == {
-                'id':asset_pack_id,
-                'title':asset_pack_param['title'],
-                'description':asset_pack_param['description'],
-                'web_address':asset_pack_param['web_address'],
-                'store_media':store_media_param
-            },f'Error reading asset_pack. Incorrect response'
+            assert response["title"] == asset_pack_param["title"],f'Error testing created asset_pack. name diverges'
+            assert response["description"] == asset_pack_param["description"],f'Error testing created asset_pack. description diverges'
+            assert float(response["cost"]) == float(asset_pack_param["cost"]),f'Error testing created asset_pack. cost diverges'
+            assert response["web_address"] == asset_pack_param["web_address"],f'Error testing created asset_pack. url diverges'
+            assert response["store_media"] == store_media_param,f'Error testing created asset_pack. store media diverges'
+
         else:
             print("Test skipped (asset_pack Table not found)\n")    
     
@@ -157,10 +150,13 @@ class TestAsset_pack_DAO:
                                 {'web_address': 'http://www.archive.com/24376/thumb2.png','type':'thumbnail'}
                             ]
         
-            asset_pack_id = self._create_table_item('Spaceship sprites',
-                                '2D top down spaceship sprites',
-                                'http://www.archive.com/68758sfs850/2dSpaceships.zip',
-                                 store_media_param)
+            asset_pack_id = self._create_table_item( 
+                                    {'title':'Spaceship sprites',
+                                    'description': '2D top down spaceship sprites',
+                                    'web_address':'http://www.archive.com/68758sfs850/2dSpaceships.zip',
+                                    'store_media':store_media_param,
+                                    'cost':'1.0'}
+                                )
                     
             assert asset_pack_id != return_values.TABLE_NOT_FOUND,f'Error creating item before deletion'
             
@@ -172,6 +168,7 @@ class TestAsset_pack_DAO:
             updated_item_param = {
                 'title':'2D city textures',
                 'description':'Set of realistic textures for urban locations',
+                'cost':'1.5',
                 'web_address':'http://www.archive.com/68758850/urban_textures.zip',
                 'store_media': updated_store_media_param
             }
@@ -183,6 +180,7 @@ class TestAsset_pack_DAO:
             response = self._get_table_item(asset_pack_id)
             assert response['title'] == updated_item_param['title'], f'asset_pack name not properly updated '
             assert response['description'] == updated_item_param['description'], f'asset_pack description not properly updated'
+            assert float(response['cost']) == float(updated_item_param['cost']), f'asset_pack description not properly updated'
             assert response['web_address'] == updated_item_param['web_address'], f'asset_pack url not properly updated'
             assert response['store_media'] == updated_item_param['store_media'], f'asset_pack store_media not properly updated'
 
@@ -194,35 +192,42 @@ class TestAsset_pack_DAO:
         print('\n[[Entering test_delete_asset_pack]]\n')
         table = self._get_table()
         if table:
-            asset_pack_id = self._create_table_item('Spaceship sprites',
-                                '2D top down spaceship sprites',
-                                'http://www.archive.com/68758sfs850/2dSpaceships.zip',
-                                )
+            asset_pack_id = self._create_table_item({
+                                'title':'Spaceship sprites',
+                                'description':'2D top down spaceship sprites',
+                                'web_address':'http://www.archive.com/68758sfs850/2dSpaceships.zip',
+                                })
             assert asset_pack_id != return_values.TABLE_NOT_FOUND,f'Error: item not created (TABLE NOT FOUND)'
             result = self._dao.delete_item(asset_pack_id)
             assert result == return_values.SUCCESS,f'Error testing delete asset_pack. Incorrect response'
             response = table.get_item(Key={'id':asset_pack_id})
             assert 'Item' not in response,f'Error testing delete asset_pack. Bad response'
         else:
-            printf("Test skipped (asset_pack table not found)\n")
+            print("Test skipped (asset_pack table not found)\n")
 
     #It must be possible to search asset_packs by keyword
     def test_search_asset_packs_by_keyword(self):
         print('\n[[Entering test_search_asset_packs_by_keyword]]\n')
         table = self._get_table()
         if table:
-            asset_pack_id1 = self._create_table_item('name 1',
-                                'description 1',
-                                'url 1')
-            assert asset_pack_id1 != return_values.TABLE_NOT_FOUND,f'Error creating item before deletion'
-            asset_pack_id2 = self._create_table_item('name 2',
-                                'description 2',
-                                'url 2')
-            assert asset_pack_id2 != return_values.TABLE_NOT_FOUND,f'Error creating item before deletion'
-            asset_pack_id3 = self._create_table_item('name 3',
-                                'description 3',
-                                'url 3')
-            assert asset_pack_id3 != return_values.TABLE_NOT_FOUND,f'Error creating item before deletion'
+            asset_pack_id1 = self._create_table_item({
+                                'title':'name 1',
+                                'description':'description 1',
+                                'web_address':'url 1'
+                                })
+            assert asset_pack_id1 != return_values.TABLE_NOT_FOUND,f'Error creating item'
+            asset_pack_id2 = self._create_table_item({
+                                'title':'name 2',
+                                'description':'description 2',
+                                'web_address':'url 2'
+                                })
+            assert asset_pack_id2 != return_values.TABLE_NOT_FOUND,f'Error creating item'
+            asset_pack_id3 = self._create_table_item({
+                                'title':'name 3',
+                                'description':'description 3',
+                                'web_address':'url 3'
+                                })
+            assert asset_pack_id3 != return_values.TABLE_NOT_FOUND,f'Error creating item'
             
             test_result1 = self._dao.search_itens_by_keyword("name 1",{'title','description','web_address'})
             print(test_result1)
@@ -246,6 +251,40 @@ class TestAsset_pack_DAO:
 
         else:
             printf("Test skipped (asset_pack table not found)\n")
+
+    # It must be possible to return a list with all asset packs
+    def test_list_all(self):
+        print('\n[[Entering test_list_all]]\n')
+        table = self._get_table()
+        if table:
+            asset_pack_id1 = self._create_table_item({
+                                'title':'test_list_all name 1',
+                                'description':'description test_list_all1',
+                                'web_address':'url test_list_all1'
+                                })
+            assert asset_pack_id1 != return_values.TABLE_NOT_FOUND,f'Error creating item'
+            asset_pack_id2 = self._create_table_item({
+                                'title':' test_list_allname 2',
+                                'description':'description test_list_all2',
+                                'web_address':'url test_list_all2'
+                                })
+            assert asset_pack_id2 != return_values.TABLE_NOT_FOUND,f'Error creating item'
+            asset_pack_id3 = self._create_table_item({
+                                'title':'test_list_all name 3',
+                                'description':'description test_list_all3',
+                                'web_address':'url test_list_all3'
+                                })
+            assert asset_pack_id3 != return_values.TABLE_NOT_FOUND,f'Error creating item'
+            
+            result = self._dao.read_all_items()
+            for item in result:
+                print(item)
+                print("\n ... \n")
+                assert 'title' in item,f'Could not fint title in returned item'
+                assert 'description' in item,f'Could not fint description in returned item'
+                
+        else:
+            print("Test skipped (asset_pack table not found)\n")
 
     def teardown_class(self):
         print('\n[[Entering teardown_class]]\n')

@@ -9,6 +9,7 @@ The "User" table manages user information within the system. Each user is unique
 - **ID:** A unique identifier for each user, generated using a hashing function based on the user's name.
 - **Name:** The username of the user.
 - **Password:** The hashed and salted password of the user for secure authentication.
+- **Balance:** Amout of credits disponible for purchasing 
 - **Purchased Asset Packs:** A list of asset packs that the user has purchased. Each item on the list is an id for an asset_pack that is refferenced on the ***Asset pack table***.
 
     ```markdown
@@ -26,6 +27,7 @@ The "Asset Packs" table manages information about various asset packs available 
 - **ID:** A unique identifier for each asset pack, generated using a hashing function based on the asset pack's title.
 - **Title:** The title or name of the asset pack.
 - **Description:** A brief description of the contents or purpose of the asset pack.
+- **Cost:** The value of the packet, in credits 
 - **Web Address:** The web address or URL associated with the asset pack.
 - **Store Media List:** A list of dictionaries that describe media content that is used for presentation of the asset pack on the store. Each dictionary has the folowing format:
 

@@ -23,6 +23,7 @@ class Table_Defs:
         }
 
     def get_public_table_names(self):
+        print(self.public_tables)
         return self.public_tables
 
     def get_test_table_names(self):

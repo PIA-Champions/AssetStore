@@ -38,15 +38,20 @@ class Purchase_Controller:
             return return_values.ITEM_NOT_FOUND + ': ASSET_PACK' 
 
         
-        # [TODO] Prossess purchasing business rules 
-        
-        purchased_asset_packs.append(asset_pack_id)
-        user_update_data = user_data
-        user_update_data['purchased_asset_packs'] = purchased_asset_packs
-        
-        self._u_dao.update_item(user_id,user_update_data)
-        return return_values.SUCCESS
+        #Prossess purchasing business rules
+        balance = float(user_data.get('balance','0'))
+        cost = float (asset_pack_data.get('cost','0'))
 
+        if cost > balance:
+            return return_values.NOT_ENOUGH_BALANCE_FOR_PURCHASE
+            
+        user_data['balance'] = str(balance - cost)
+        purchased_asset_packs.append(asset_pack_id)
+        user_data['purchased_asset_packs'] =  purchased_asset_packs
+        self._u_dao.update_item(user_id,user_data)
+        
+        return return_values.SUCCESS
+    
     # Return a list of asset packs ids purchased by the user
     # May also return 
     # ITEM_NOT_FOUND: USER

@@ -29,9 +29,10 @@ class Asset_pack_DAO(base_dao.BaseDAO):
     
         item = {
             'id':{'S':item_id},
-            'title':{'S':item_param['title']},
-            'description':{'S':item_param['description']},
-            'web_address':{'S':item_param['web_address']},
+            'title':{'S':item_param.get('title','')},
+            'description':{'S':item_param.get('description','')},
+            'cost':{'N':item_param.get('cost','0.0')},
+            'web_address':{'S':item_param.get('web_address','')},
             'store_media':{'L':formated_store_media},
 
         }
@@ -60,6 +61,7 @@ class Asset_pack_DAO(base_dao.BaseDAO):
         return  {
             'title': item['title']['S'],
             'description': item['description']['S'],
+            'cost':item['cost']['N'],
             'web_address': item['web_address']['S'],
             'id': item['id']['S'],
             'store_media':store_media
@@ -78,11 +80,12 @@ class Asset_pack_DAO(base_dao.BaseDAO):
             }}) 
 
         expression = update_expression.UpdateExpression(
-            "SET #t = :new_title, #d = :new_description,#w = :new_web_address,#stm = :new_store_media",
-            {"#t": "title", "#d": "description", "#w":"web_address","#stm":"store_media"},
+            "SET #t = :new_title, #d = :new_description,#w = :new_web_address,#stm = :new_store_media,#cst = :new_cost",
+            {"#t": "title", "#d": "description", "#w":"web_address","#stm":"store_media","#cst":"cost"},
             {
                 ":new_title": {"S": item_param['title']},
                 ":new_description": {"S": item_param['description']},
+                ":new_cost": {"N":item_param['cost']},
                 ":new_web_address": {"S": item_param['web_address']},
                 ":new_store_media":{"L":formated_store_media}
             }

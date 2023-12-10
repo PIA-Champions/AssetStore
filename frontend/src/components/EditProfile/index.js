@@ -15,7 +15,7 @@ function EditProfile() {
 
                     <label>Balance</label><br />
                     <input className={styles.input_balance} type="number" id="balanceEdit" name="balance" placeholder="Balance"/><br/>
-                    <a type="button" className={styles.balance_button}>✔</a>
+                    <a href='botaodesaldo' type="button" className={styles.balance_button}>✔</a>
 
                     <br/><button className={styles.button_ok} type="submit">confirmar alterações</button>
                 </form>
