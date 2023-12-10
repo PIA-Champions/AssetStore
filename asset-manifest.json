@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/storeassets/static/css/main.8a0f5d26.css",
+    "main.js": "/storeassets/static/js/main.11c76a86.js",
+    "static/media/asset-background.jpg": "/storeassets/static/media/asset-background.b9aec7609cf0ec35fee6.jpg",
+    "static/media/assets-rpg.png": "/storeassets/static/media/assets-rpg.9eb96b575eca14ebd0c3.png",
+    "index.html": "/storeassets/index.html",
+    "main.8a0f5d26.css.map": "/storeassets/static/css/main.8a0f5d26.css.map",
+    "main.11c76a86.js.map": "/storeassets/static/js/main.11c76a86.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.8a0f5d26.css",
+    "static/js/main.11c76a86.js"
+  ]
+}
