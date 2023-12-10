@@ -103,9 +103,16 @@ def buy_assets(asset_id):
     return {'Response': response}
 
 #Utilizado anteriormente para criar a tabela de assets
-@app.route('/create_table', methods=['POST'])
+@app.route('/create_table/assets', methods=['POST'])
 def create_table():
     dao = asset_pack_dao.Asset_pack_DAO(TABLE_ASSETS_NAME)
+    response = dao.create_table()
+    print(response)
+    return {'Response': response}
+
+@app.route('/create_table/users', methods=['POST'])
+def create_table():
+    dao = user_dao.User_DAO(TABLE_USER_NAME)
     response = dao.create_table()
     print(response)
     return {'Response': response}
