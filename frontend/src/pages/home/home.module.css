@@ -27,3 +27,14 @@
     border-radius: 12px;
     transform: scale(2.7);
 }
+
+.container_header {
+    overflow:unset;
+}
+
+.container_header h5.footer {
+    width: 100vw;
+    position: absolute;
+    top: 830px;
+    text-align: center;
+}

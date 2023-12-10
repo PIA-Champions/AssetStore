@@ -3,7 +3,7 @@ import styles from "./home.module.css";
 
 function Home() {
     return (
-        <div>
+        <div className="container_header">
             <Header />
             <div className={styles.iwt_container}>
                 <p>
@@ -13,10 +13,10 @@ function Home() {
                     <p>Descubra a diferença que os nossos assets podem fazer, e eleve o nível dos seus jogos para criar experiências inesquecíveis.</p>
                 </p>
                 <picture></picture>
-                {/* <figure>
-                    <iframe src="https://giphy.com/embed/3o85xB7xyoN4p4zGfK" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
-                </figure> */}
             </div>
+            <h5 className={styles.footer}>
+                © 2023 - All Rights Reserved - Assetstore
+            </h5>
         </div>
     );
 }
