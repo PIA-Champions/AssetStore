@@ -30,7 +30,7 @@ export default function FormRegister() {
       setError(true);
     } else {
       try {
-        fetch('https://ckf9b5do98.execute-api.us-east-1.amazonaws.com/api/register', {
+        fetch('https://j8xkhook54.execute-api.us-east-1.amazonaws.com/api/register', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
