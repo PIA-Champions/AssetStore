@@ -1,6 +1,6 @@
 import styles from "../AssetDetails/AssetDetails.module.css";
 
-function AssetDetails() {
+export default function AssetDetails() {
     return (
         <div className={styles.card_container}>
             <h1 id="title-assets">RPG Asset</h1>
@@ -11,5 +11,3 @@ function AssetDetails() {
         </div>
     );
 }
-
-export default AssetDetails;

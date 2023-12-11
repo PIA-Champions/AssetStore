@@ -10,8 +10,7 @@ export default function AssetList() {
       try {
         const response = await fetch(`${apiUrl}/assets`, { method: 'GET' });
         const data = await response.json();
-        console.log(data);
-        setAssets(data);
+        setAssets(data["Response"]);
       } catch (error) {
         console.error('Error fetching assets:', error);
       }
@@ -24,7 +23,13 @@ export default function AssetList() {
     <div>
       <h2>Lista de Assets</h2>
       <ul>
-        " todo "
+      {assets.map(asset => (
+          <li key={asset.id}>
+            <p>{asset.title}</p>
+            <p>{asset.description}</p>
+            {/* Add more details as needed */}
+          </li>
+        ))}
       </ul>
     </div>
   );
