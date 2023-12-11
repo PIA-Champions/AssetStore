@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { apiUrl } from '../../ApiConfig/apiConfig.js';
-//import { AssetDetails } from '../AssetDetails/index.js';
+import { AssetDetails } from '../AssetDetails/index.js';
 
 export default function AssetList() {
   const [assets, setAssets] = useState([]);
@@ -10,6 +10,7 @@ export default function AssetList() {
       try {
         const response = await fetch(`${apiUrl}/assets`, { method: 'GET' });
         const data = await response.json();
+        console.log(data);
         setAssets(data["Response"]);
       } catch (error) {
         console.error('Error fetching assets:', error);
@@ -24,9 +25,17 @@ export default function AssetList() {
       <h2>Lista de Assets</h2>
       <ul>
       {assets.map(asset => (
-          <li key={asset.id}>
+          <li key={asset.id}>   
+            
+            <AssetDetails 
+              title={asset.title} 
+              description={asset.description}
+              price={asset.cost}
+            />
+            
             <p>{asset.title}</p>
             <p>{asset.description}</p>
+            <p>{asset.store_media[0].web_address}</p>
             {/* Add more details as needed */}
           </li>
         ))}
