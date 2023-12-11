@@ -26,17 +26,15 @@ export default function AssetList() {
       <ul>
       {assets.map(asset => (
           <li key={asset.id}>   
-            
-            <AssetDetails 
-              title={asset.title} 
-              description={asset.description}
-              price={asset.cost}
-            />
-            
-            <p>{asset.title}</p>
-            <p>{asset.description}</p>
-            <p>{asset.store_media[0].web_address}</p>
-            {/* Add more details as needed */}
+            <div>
+              <AssetDetails 
+                title={asset.title} 
+                description={asset.description}
+                price={asset.cost}
+                thumb_url={asset.store_media[0].web_address}
+              />
+              <br/>
+            </div>
           </li>
         ))}
       </ul>
