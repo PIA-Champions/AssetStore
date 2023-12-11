@@ -1,8 +1,9 @@
 .iwt_container {
-    width: 100vw;
-    height: 60vh;
+    height: 55vh;
     position:absolute;
     top: 240px;
+    right: 0;
+    left: 0;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -19,20 +20,19 @@
 }
 
 .iwt_container picture {
-    width: 20vw;
-    height: 20vw;
+    margin-bottom: 150px;
     background-size: 100%;
     background-repeat: no-repeat;
     background-image: url("../../../public/imagens/asset-monster.png");
     border-radius: 12px;
-    transform: scale(2.7);
+    transform: scale(3.7);
 }
 
 .container_header {
     overflow:unset;
 }
 
-.container_header h5.footer {
+.container_header h5.copyright {
     width: 100vw;
     position: absolute;
     top: 830px;

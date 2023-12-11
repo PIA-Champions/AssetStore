@@ -3,7 +3,7 @@ import styles from "./home.module.css";
 
 function Home() {
     return (
-        <div className="container_header">
+        <div className={styles.container_header}>
             <Header />
             <div className={styles.iwt_container}>
                 <p>
@@ -14,7 +14,7 @@ function Home() {
                 </p>
                 <picture></picture>
             </div>
-            <h5 className={styles.footer}>
+            <h5 className={styles.copyright}>
                 © 2023 - All Rights Reserved - Assetstore
             </h5>
         </div>
