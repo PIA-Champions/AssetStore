@@ -1,8 +1,8 @@
-import AssetDetails from "../../components/AssetDetails/index.js";
+import AssetList from "../../components/AssetList/index.js";
 
 function Assets() {
     return (
-        <AssetDetails />
+        <AssetList />
     );
 }
 

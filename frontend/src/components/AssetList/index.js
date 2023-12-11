@@ -1,25 +1,24 @@
-// AssetList.js
-
+//Component for listing all assets
 import React, { useState, useEffect } from 'react';
 
 const AssetList = () => {
   const [assets, setAssets] = useState([]);
 
   useEffect(() => {
-    // Função para buscar assets do backend
+    // Method for fetching assets from backend
     const fetchAssets = async () => {
       try {
-        const response = await fetch('URL_DO_SEU_BACKEND/assets');
+        const response = await fetch('${apiUrl}/assets');
         const data = await response.json();
         setAssets(data.Response);
       } catch (error) {
-        console.error('Erro ao buscar assets:', error);
+        console.error('Error fetching assets:', error);
       }
     };
 
-    // Chama a função para buscar os assets quando o componente é montado
+    // Call the method for fetching assets when the component is mounted
     fetchAssets();
-  }, []); // O array vazio assegura que o useEffect será executado apenas uma vez
+  }, []); // The empty array assures the code will be called one time only
 
   return (
     <div>
