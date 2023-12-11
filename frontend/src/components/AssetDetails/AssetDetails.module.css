@@ -1,6 +1,5 @@
 /*>>> MOBILE <<<*/
 .card_container {
-    /* background: radial-gradient(var(--roxo-escuro), var(--roxo)); */
     background-color: var(--roxo);
     width: 300px;
     height: 530px;
@@ -22,12 +21,12 @@
     justify-content: center;
 }
 
-picture {
+figure#image-assets {
     width: 240px;
     height: 190px;
     background-size: 100%;
     background-repeat: no-repeat;
-    background-image: url("../../../public/imagens/assets-rpg.png");
+    background-image: url("../../../public/imagens/asset-gif.gif");
     border-radius: 12px;
 }
 
@@ -53,12 +52,12 @@ button.btn_assets {
         justify-content: center;
     }
     
-    picture {
+    figure#image-assets {
         width: 240px;
         height: 190px;
         background-size: 100%;
         background-repeat: no-repeat;
-        background-image: url("../../../public/imagens/assets-rpg.png");
+        background-image: url("../../../public/imagens/asset-gif.gif");
         border-radius: 12px;
     }
     
