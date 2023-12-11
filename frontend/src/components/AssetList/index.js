@@ -1,5 +1,6 @@
 //Component for listing all assets
 import React, { useState, useEffect } from 'react';
+import { apiUrl } from '../../ApiConfig/apiConfig.js';
 
 const AssetList = () => {
   const [assets, setAssets] = useState([]);
@@ -8,9 +9,9 @@ const AssetList = () => {
     // Method for fetching assets from backend
     const fetchAssets = async () => {
       try {
-        const response = await fetch('${apiUrl}/assets');
-        const data = await response.json();
-        setAssets(data.Response);
+        fetch('${apiUrl}/assets',{method:'GET'})
+        .then (response => response.json())
+        .then (data => setAssets(data));
       } catch (error) {
         console.error('Error fetching assets:', error);
       }
