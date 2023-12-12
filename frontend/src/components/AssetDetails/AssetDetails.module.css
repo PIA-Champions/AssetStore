@@ -21,12 +21,16 @@
     justify-content: center;
 }
 
-figure.image_card {
+figure.image_container {
     width: 240px;
     height: 190px;
     background-size: 100%;
-    background-repeat: no-repeat;
-    background-image: url("../../../public/imagens/asset-gif.gif");
+    border-radius: 12px;
+}
+
+.image_container .image_card {
+    width: 240px;
+    height: 190px;
     border-radius: 12px;
 }
 
@@ -52,12 +56,10 @@ button.btn_assets {
         justify-content: center;
     }
     
-    figure.image_card {
+    figure.image_container {
         width: 240px;
         height: 190px;
         background-size: 100%;
-        background-repeat: no-repeat;
-        background-image: url("../../../public/imagens/asset-gif.gif");
         border-radius: 12px;
     }
     
