@@ -1,28 +1,38 @@
 /* >>> MOBILE <<< */
-.header a {
+.header_container {
+    width: 70vw;
+    margin: auto;
+}
+
+.header_container a {
     text-decoration: none;
 }
 
-.header h1 {
+.header_container h1 {
     text-align: center;
     padding: 1.4em 1.4em 0 1.4em;
     color: var(--roxo-escuro);
 }
 
-.header nav {
+.header_container nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 3.0em 0 3.0em;
+    /* padding: 0 3.0em 0 3.0em; */
     bottom: 100px;
     color: #323673;
 }
 
 /* >>> TABLET <<< */
 @media only screen and (min-width: 768px) {
-    .header nav {
-        padding: 0 12em 0 12em;
-        width: 700px;
+    .header_container {
+        width: unset;
+    }
+    
+    .header_container nav {
+        width: 600px;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 
@@ -32,19 +42,19 @@
         width: 700px;
     }
     
-    .header {
+    .header_container {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
     }
     
-    .header h1 {
+    .header_container h1 {
         width: 7em;
         padding: 1em 1em 0 1em;
     }
 
-    .header nav {
+    .header_container nav {
         padding: 0;
         display: flex;
         justify-content: space-between;
