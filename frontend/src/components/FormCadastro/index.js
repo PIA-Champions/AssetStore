@@ -1,5 +1,6 @@
 import styles from '../FormCadastro/form.module.css';
 import { useState } from 'react';
+import { apiUrl } from '../../ApiConfig/apiConfig.js';
 
 export default function FormRegister() {
   const [name, setName] = useState('');
@@ -30,7 +31,8 @@ export default function FormRegister() {
       setError(true);
     } else {
       try {
-        fetch('https://vzv3radb41.execute-api.us-east-1.amazonaws.com/api/register', {
+        
+        fetch('${apiUrl}/register', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
