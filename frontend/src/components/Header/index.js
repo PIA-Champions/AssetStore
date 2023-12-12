@@ -6,7 +6,7 @@ import MenuDropdown from "../MenuDropdown";
 
 function Header() {
     return (
-        <header className={styles.header}>
+        <header className={styles.header_container}>
             <Link to="./">
                 <h1>ASSET STORE</h1>
             </Link>

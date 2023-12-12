@@ -4,7 +4,7 @@
 	justify-content: center;
 	margin-bottom: 0.2rem;
 	position: absolute;
-	top: 170px;
+	top: 200px;
     background: #2f3640;
     height: 40px;
     border-radius: 40px;
@@ -50,10 +50,10 @@
 }
 
 @media screen and (max-width: 620px) {
-.searchBox:hover > .searchInput {
-    width: 150px;
-    padding: 0 6px;
-}
+    .searchBox:hover > .searchInput {
+        width: 150px;
+        padding: 0 6px;
+    }
 }
 
 /* >>> TABLET <<< */
