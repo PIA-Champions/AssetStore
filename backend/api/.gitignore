@@ -34,7 +34,4 @@ __pycache__/
 
 # Arquivos de registro
 *.log
-# Arquivos para manipulação de variáveis de ambiente
-configure_credentials.sh
-default_credentials.txt
 
