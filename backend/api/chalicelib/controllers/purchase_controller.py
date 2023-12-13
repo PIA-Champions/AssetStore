@@ -21,7 +21,7 @@ class Purchase_Controller:
     #   SUCCESS
     #   ITEM_NOT_FOUD: USER
     #   ITEM_NOT_FOUND: ASSET_PACK
-    def purchase(self,user_id,asset_pack_id):
+    def purchase_asset_pack(self,user_id,asset_pack_id):
         
         user_data = self._u_dao.read_item(user_id)
         if not self._u_dao.validate_item(user_data):
@@ -38,7 +38,7 @@ class Purchase_Controller:
             return return_values.ITEM_NOT_FOUND + ': ASSET_PACK' 
 
         
-        #Prossess purchasing business rules
+        #Prossess asset pack purchasing business rules
         balance = float(user_data.get('balance','0'))
         cost = float (asset_pack_data.get('cost','0'))
 
@@ -50,6 +50,23 @@ class Purchase_Controller:
         user_data['purchased_asset_packs'] =  purchased_asset_packs
         self._u_dao.update_item(user_id,user_data)
         
+        return return_values.SUCCESS
+    
+    # Process purchasing of credits
+    def purchase_credits(self,user_id,credits):
+        user_data = self._u_dao.read_item(user_id)
+        if not self._u_dao.validate_item(user_data):
+            return return_values.ITEM_NOT_FOUND + ': USER'
+        if credits < 0:
+            return return_values.INVALID_INPUT_DATA
+
+        # Process credit purchasing business rulles
+        # [TODO] Validation and dept according with payment system 
+
+        current_balance = float(user_data['balance'])
+        user_data['balance'] = str(current_balance + credits)
+        
+        self._u_dao.update_item(user_id,user_data)    
         return return_values.SUCCESS
     
     # Return a list of asset packs ids purchased by the user
