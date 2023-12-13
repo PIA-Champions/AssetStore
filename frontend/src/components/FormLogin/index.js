@@ -64,9 +64,11 @@ function FormLogin() {
                             setError(true);
                         }
                         else {
-                            console.log(data.Response);
+                            console.log(data);
                             const token = data.Token;
+                            const user_id = data.id;
                             sessionStorage.setItem("assetsToken", token);
+                            sessionStorage.setItem("logged_user_id",user_id)
                             setSubmitted(true);
                             setError(false);
                             navigate('/');
