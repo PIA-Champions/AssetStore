@@ -1,6 +1,8 @@
 import styles from "../FormLogin/FormLogin.module.css";
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { apiUrl } from '../../ApiConfig/apiConfig.js';
+
 
 function FormLogin() {
     const [name, setName] = useState(''); // [variável, função que atualiza a variável]
@@ -42,7 +44,7 @@ function FormLogin() {
         }
         else {
             try {
-                fetch('https://vzv3radb41.execute-api.us-east-1.amazonaws.com/api/login', {
+                fetch(`${apiUrl}/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -57,11 +59,12 @@ function FormLogin() {
                 })
                     .then(response => response.json())
                     .then(data => {
-                        console.log(data.Response)
+                        console.log(data);
                         if (data.Response === "INVALID_INPUT_DATA") {
                             setError(true);
                         }
                         else {
+                            console.log(data.Response);
                             const token = data.Token;
                             sessionStorage.setItem("assetsToken", token);
                             setSubmitted(true);
