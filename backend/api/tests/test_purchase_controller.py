@@ -49,7 +49,7 @@ class Test_Purchase_Controller:
         user_id = self._user_dao.create_item(user_param)
         asset_pack_id = self._asset_pack_dao.create_item(asset_pack_param)
 
-        result = self._purchase.purchase(user_id,asset_pack_id)
+        result = self._purchase.purchase_asset_pack(user_id,asset_pack_id)
         assert result == return_values.SUCCESS,f'Error purchasing item'
         
         ret_user = self._user_dao.read_item(user_id)
@@ -77,13 +77,30 @@ class Test_Purchase_Controller:
         asset_pack_id_1 = self._asset_pack_dao.create_item(asset_pack_param_1)
         asset_pack_id_2 = self._asset_pack_dao.create_item(asset_pack_param_2)
         
-        self._purchase.purchase(user_id,asset_pack_id_1)
-        self._purchase.purchase(user_id,asset_pack_id_2)
+        self._purchase.purchase_asset_pack(user_id,asset_pack_id_1)
+        self._purchase.purchase_asset_pack(user_id,asset_pack_id_2)
 
         purchased_list = self._purchase.get_purchased_list(user_id)
         
         assert asset_pack_id_1 in purchased_list,f'Error listing purchased asset packs'
         assert asset_pack_id_2 in purchased_list,f'Error listing purchased asset packs'
+
+    #it must to be possible to purchase credits and increase user balance
+    def test_purchase_credits(self):
+        print('\n[[Entering test_purchase_credits]]\n')
+        
+        user_param = {'name':'Bobby',
+                      'password':"nicepassword",
+                      'balance':'10'
+                      }
+
+        user_id = self._user_dao.create_item(user_param)
+        
+        result = self._purchase.purchase_credits(user_id,10)
+        assert result == return_values.SUCCESS,f'Error purchasing credits'
+        
+        ret_user = self._user_dao.read_item(user_id)
+        assert ret_user['balance'] == '20',f'Error updating balance after credit purchase'
         
     # Purchase must fail if user has not enough credits to purchase an item
     def test_purchase_failure(self):
@@ -103,7 +120,7 @@ class Test_Purchase_Controller:
         user_id = self._user_dao.create_item(user_param)
         asset_pack_id = self._asset_pack_dao.create_item(asset_pack_param)
 
-        result = self._purchase.purchase(user_id,asset_pack_id)
+        result = self._purchase.purchase_asset_pack(user_id,asset_pack_id)
         assert result == return_values.NOT_ENOUGH_BALANCE_FOR_PURCHASE,f'Error User purchased without enough credits'
 
     def teardown_class(self):
