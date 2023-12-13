@@ -60,7 +60,7 @@ function FormLogin() {
                     .then(response => response.json())
                     .then(data => {
                         console.log(data);
-                        if (data.Response === "INVALID_INPUT_DATA") {
+                        if (data && data.Response === "INVALID_INPUT_DATA") {
                             setError(true);
                         }
                         else {
