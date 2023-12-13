@@ -38,8 +38,7 @@ def login():
     dao = user_dao.User_DAO(TABLE_USER_NAME)
     body = app.current_request.json_body
     response = dao.user_login(body['name'], body['password'])
-
-    return {'Response': response , 'Token': response}
+    return {'Response': response['jwt'] , 'Token': response['jwt'],'id':response['id']}
 
 
 @app.authorizer()
