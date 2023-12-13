@@ -125,7 +125,7 @@ class User_DAO(base_dao.BaseDAO):
                         'jti': unique_id,
                     }
 
-                    return jwt.encode(payload, 'secret', algorithm='HS256')
+                    return {'jwt':jwt.encode(payload, 'secret', algorithm='HS256'), 'user_id':id}
                 else:
                     return return_values.INVALID_INPUT_DATA
             else:
