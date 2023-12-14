@@ -15,6 +15,7 @@ function Header() {
                 <HeaderLink url="./">Home</HeaderLink>
                 <HeaderLink url="./assets">Assets</HeaderLink>
                 <MenuDropdown />
+                <HeaderUserInfo/>
                 <HeaderSearch />
             </nav>
         </header>
