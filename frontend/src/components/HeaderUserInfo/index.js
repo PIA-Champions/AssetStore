@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react';
 import { apiUrl } from '../../ApiConfig/apiConfig.js';
 
 export default function HeaderUserInfo() {
@@ -23,19 +22,18 @@ export default function HeaderUserInfo() {
 
 
 function GetUserInfo(userId){
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(`${apiUrl}/user/${userId}`, { method: 'GET' });
-                const data = await response.json();
-                console.log(data);
-                return data;
-            } catch (error) {
-                console.error('Error fetching logged user data:', error);
-            }
-        };
-
-            return fetchData();
-
-    }); 
+    try{
+        fetch(`${apiUrl}/user/${userId}`,{
+            method: 'GET',
+            mode: "cors",
+        })
+        .then(response=>response.json())
+        .then(data=>{
+            console.log(data);
+            return data;
+        })
+    }catch (error) {
+        console.error(error);
+    }
+    
 }
