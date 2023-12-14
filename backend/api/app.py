@@ -114,6 +114,7 @@ def buy_credits(user_id):
 def get_user(user_id):
     userdao = user_dao.User_DAO(TABLE_USER_NAME)
     response = userdao.read_item(user_id)
+    del response['password']
     return {'Response': response}
 
 
