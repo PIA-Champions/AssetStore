@@ -3,6 +3,7 @@ import styles from "./header.module.css";
 import HeaderLink from "../HeaderLink";
 import HeaderSearch from "../HeaderSearch";
 import MenuDropdown from "../MenuDropdown";
+import HeaderUserInfo from "../HeaderUserInfo";
 
 function Header() {
     return (
@@ -19,5 +20,4 @@ function Header() {
         </header>
     );
 }
-
 export default Header;

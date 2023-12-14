@@ -110,6 +110,13 @@ def buy_credits(user_id):
     response = purchase.purchase_credits(user_id,credits_to_buy)
     return {'Response': response}
 
+@app.route('/user/{user_id}', methods=['GET'], cors=cors_config, authorizer=jwt_auth)
+def get_user(user_id):
+    userdao = user_dao.User_DAO(TABLE_USER_NAME)
+    response = userdao.read_item(user_id)
+    return {'Response': response}
+
+
 #Utilizado anteriormente para criar a tabela de assets
 @app.route('/create_table/assets', methods=['POST'])
 def create_table():
