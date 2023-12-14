@@ -59,12 +59,10 @@ function FormLogin() {
                 })
                     .then(response => response.json())
                     .then(data => {
-                        console.log(data);
                         if (data && data.Response === "INVALID_INPUT_DATA") {
                             setError(true);
                         }
                         else {
-                            console.log(data);
                             const token = data.Token;
                             const user_id = data.id;
                             sessionStorage.setItem("assetsToken", token);
