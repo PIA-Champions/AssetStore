@@ -57,24 +57,31 @@ function FormLogin() {
                         password: password
                     })
                 })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data && data.Response === "INVALID_INPUT_DATA") {
-                            setError(true);
-                        }
-                        else {
-                            const token = data.Token;
-                            const user_id = data.id;
-                            sessionStorage.setItem("assetsToken", token);
-                            sessionStorage.setItem("logged_user_id",user_id)
-                            setSubmitted(true);
-                            setError(false);
-                            navigate('/');
-                        }
-                    })
-                    .catch(error => {
-                        console.error(error);
-                    });
+                .then(response => {
+                    console.log(response.status);
+                    if (response.status === 401){
+                        setError(true);
+                    }
+                    else
+                        return response.json()
+                })
+                .then(data => {
+                    if (data && data.Response === "INVALID_INPUT_DATA") {
+                        setError(true);
+                    }
+                    else {
+                        const token = data.Token;
+                        const user_id = data.id;
+                        sessionStorage.setItem("assetsToken", token);
+                        sessionStorage.setItem("logged_user_id",user_id)
+                        setSubmitted(true);
+                        setError(false);
+                        navigate('/');
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
             } catch (error) {
                 console.error(error);
             }
