@@ -29,7 +29,7 @@ export default function HeaderUserInfo() {
 
 function UserInfoContent({ userInfo }) {
   // Render user information based on userInfo
-  var userName = "User not logged"
+  let userName = "User not logged"
   
   if(userInfo){
     userName = userInfo.name;
