@@ -1,4 +1,4 @@
-from chalice import Chalice, AuthResponse, CORSConfig
+from chalice import Chalice, AuthResponse, CORSConfig, Response, UnauthorizedError, BadRequestError
 from chalicelib.DAO import user_dao, asset_pack_dao
 from chalicelib.controllers import purchase_controller
 from chalicelib.definitions import database_defs
@@ -30,7 +30,8 @@ def user_register():
     dao = user_dao.User_DAO(TABLE_USER_NAME)
     body = app.current_request.json_body
     response = dao.create_item(body)
-    print(response)
+    if response == 'ITEM_ALREADY_EXISTS':
+        raise BadRequestError('User already exists')
     return {'Response': response}
 
 @app.route('/login', methods=['POST'], cors=cors_config)
@@ -38,7 +39,12 @@ def login():
     dao = user_dao.User_DAO(TABLE_USER_NAME)
     body = app.current_request.json_body
     response = dao.user_login(body['name'], body['password'])
-    return {'Response': response['jwt'] , 'Token': response['jwt'],'id':response['user_id']}
+    
+    if isinstance(response, dict):
+        if response.get('jwt', False):
+            return Response(body={'Response': 'SUCESS' , 'Token': response['jwt'], 'id':response['user_id']})
+    else:
+        raise UnauthorizedError('Invalid username or password')
 
 
 @app.authorizer()
@@ -107,7 +113,7 @@ def buy_credits(user_id):
     body = app.current_request.json_body
     coins_to_buy = body.get('credits_to_buy', 0)
     purchase = purchase_controller.Purchase_Controller()
-    response = purchase.purchase_credits(user_id,credits_to_buy)
+    response = purchase.purchase_credits(user_id,coins_to_buy)
     return {'Response': response}
 
 @app.route('/user/{user_id}', methods=['GET'], cors=cors_config)
