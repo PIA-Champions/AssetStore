@@ -142,7 +142,6 @@ class BaseDAO:
             )
         except Exception as e:
             error = str(e)
-            print(error)
             return str(e)
         if self.wait_item_status(id):
             return id
