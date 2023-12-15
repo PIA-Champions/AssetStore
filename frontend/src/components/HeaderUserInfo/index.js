@@ -32,11 +32,9 @@ function UserInfoContent({ userInfo }) {
   var userName = "User not logged"
   
   if(userInfo){
-    console.log(userInfo);
     userName = userInfo.name;
   }
 
-  console.log(userName);
   return (
     <div>
       {userName}

@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { apiUrl } from '../../ApiConfig/apiConfig.js';
 import { AssetDetails } from '../AssetDetails/index.js';
+import { getUserInfo } from '../../UserService'; // Ajuste o caminho conforme necessário
 
 export default function AssetList() {
+  
   const [assets, setAssets] = useState([]);
-
+  const [userInfo, setUserInfo] = useState([]);
+  const userId = sessionStorage.getItem("logged_user_id");
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -17,7 +21,21 @@ export default function AssetList() {
       }
     };
 
+    async function fetchUserInfo() {
+      try {
+        const userInformation = await getUserInfo(userId);
+        setUserInfo(userInformation);
+      } catch (error) {
+        console.error('Error fetching logged user information:', error);
+      }
+    }
+
     fetchData();
+    if(userId){
+      fetchUserInfo();
+    }
+    
+
   }, []); // Empty dependency array ensures that useEffect runs only once after the initial render
 
   return (
