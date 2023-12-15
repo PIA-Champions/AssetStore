@@ -32,7 +32,7 @@ export default function FormRegister() {
     } else {
       try {
         
-        fetch('${apiUrl}/register', {
+        fetch(`${apiUrl}/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
