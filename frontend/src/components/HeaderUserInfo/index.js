@@ -5,17 +5,16 @@ import { getUserInfo } from '../../UserService'; // Ajuste o caminho conforme ne
 export default function HeaderUserInfo() {
   const userId = sessionStorage.getItem("logged_user_id");
   const [userInfo, setUserInfo] = useState(null);
-  const [loading, setLoading] = useState(true);
-
+  
   useEffect(() => {
     if (userId) {
       async function fetchUserInfo() {
         try {
           const userInformation = await getUserInfo(userId);
           setUserInfo(userInformation);
-        } finally {
-          setLoading(false);
-        }
+          } catch (error) {
+          console.error(error);
+          }
       }
 
       fetchUserInfo();
