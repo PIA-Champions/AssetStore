@@ -1,6 +1,7 @@
 // HeaderUserInfo.js
 import React, { useEffect, useState } from 'react';
 import { getUserInfo } from '../../UserService'; // Ajuste o caminho conforme necessário
+import styles from "../MenuDropdown/MenuDropdown.module.css";
 
 export default function HeaderUserInfo() {
   const userId = sessionStorage.getItem("logged_user_id");
@@ -23,21 +24,32 @@ export default function HeaderUserInfo() {
   }, [userId]);
 
   return (
-            <UserInfoContent userInfo={userInfo} />
+            <UserInfoContent userInfo={userInfo} userId = {userId} />
   );
 }
 
-function UserInfoContent({ userInfo }) {
+function UserInfoContent(param) {
   // Render user information based on userInfo
-  let userName = "User not logged"
+  let userName = "User not logged"; 
+  let userBalance = "";
+  let userId = "";
   
-  if(userInfo){
-    userName = userInfo.name;
+  if(param.userInfo){
+    userName = param.userInfo.name;
+    userBalance = param.userInfo.balance;
+    userId = param.userId;
   }
 
   return (
-    <div>
-      {userName}
+    
+    <div className={styles.dropdown}>
+    <span className={styles.dropbtn} typeof="button" role="button">{userName}</span>
+    <div className={styles.dropdown_content}>
+        <p>Saldo: {userBalance} Coins</p>
+        <p>{userId} </p>
     </div>
+    </div>
+
   );
 }
+
