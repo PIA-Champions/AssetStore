@@ -57,15 +57,17 @@ class Purchase_Controller:
         user_data = self._u_dao.read_item(user_id)
         if not self._u_dao.validate_item(user_data):
             return return_values.ITEM_NOT_FOUND + ': USER'
-        if credits < 0:
+        converted_credits = float(credits)
+        if int(converted_credits) < 0:
             return return_values.INVALID_INPUT_DATA
 
         # Process credit purchasing business rulles
         # [TODO] Validation and dept according with payment system 
 
         current_balance = float(user_data['balance'])
-        user_data['balance'] = str(current_balance + credits)
+        user_data['balance'] = str(current_balance + converted_credits)
         
+
         self._u_dao.update_item(user_id,user_data)    
         return return_values.SUCCESS
     

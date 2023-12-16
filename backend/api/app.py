@@ -2,7 +2,6 @@ from chalice import Chalice, AuthResponse, CORSConfig, Response, UnauthorizedErr
 from chalicelib.DAO import user_dao, asset_pack_dao
 from chalicelib.controllers import purchase_controller
 from chalicelib.definitions import database_defs
-
 cors_config = CORSConfig(
     allow_origin='*',
     allow_headers=['Content-Type', 'X-Amz-Date', 'Authorization', 'X-Api-Key', 'X-Amz-Security-Token', 'Authorization'],
@@ -18,6 +17,7 @@ app = Chalice(app_name='api')
 
 table_defs = database_defs.Table_Defs()
 table_names = table_defs.get_public_table_names()  
+
 TABLE_USER_NAME = table_names['user_table']
 TABLE_ASSETS_NAME =  table_names['asset_packet_table']
 
@@ -56,14 +56,6 @@ def jwt_auth(auth_request):
         return AuthResponse(routes=['*'], principal_id=decoded['sub'])
     except:
         return {'Response': 'Invalid token'}
-
-
-"""
-    if token is None:
-        raise CognitoUnauthorizedError(auth_request.token)
-    return AuthResponse(routes=['*'], principal_id=token,
-                        context={'user': token})
-"""
 
 def get_authorized_username(current_request):
     return current_request.context['authorizer']['principalId']
@@ -123,18 +115,28 @@ def get_user(user_id):
     del response['password']
     return {'Response': response}
 
+@app.route('/user/{user_id}', methods=['PUT'], cors=cors_config, authorizer=jwt_auth)
+def update_user(user_id):
+    userdao = user_dao.User_DAO(TABLE_USER_NAME)
+    body = app.current_request.json_body
+    response = userdao.update_item(user_id, body)
+    return {'Response': response}
+
+@app.route('/user/{user_id}', methods=['DELETE'], cors=cors_config, authorizer=jwt_auth)
+def delete_user(user_id):
+    userdao = user_dao.User_DAO(TABLE_USER_NAME)
+    response = userdao.delete_item(user_id)
+    return {'Response': response}
 
 #Utilizado anteriormente para criar a tabela de assets
 @app.route('/create_table/assets', methods=['POST'])
 def create_table():
     dao = asset_pack_dao.Asset_pack_DAO(TABLE_ASSETS_NAME)
     response = dao.create_table()
-    print(response)
     return {'Response': response}
 
 @app.route('/create_table/users', methods=['POST'])
 def create_table():
     dao = user_dao.User_DAO(TABLE_USER_NAME)
     response = dao.create_table()
-    print(response)
     return {'Response': response}

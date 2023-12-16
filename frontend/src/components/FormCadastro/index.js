@@ -42,7 +42,7 @@ export default function FormRegister() {
           mode: "cors",
           body: JSON.stringify({
             name: name,
-            //email: email,
+            email: email,
             password: password
           })
         })

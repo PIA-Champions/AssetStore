@@ -198,10 +198,29 @@ class BaseDAO:
     def update_item(self,item_id,item_param):
         if not dynamo.check_table_existence(self.table_name):
             return return_values.TABLE_NOT_FOUND
+        """
         if not self.validate_item(item_param) or not item_id:
             return return_values.INVALID_INPUT_DATA
-    
+        """
         try:
+            userInfo = self.read_item(item_id)
+            notEmail =  item_param.get('email', True)
+            notName = item_param.get('name', True)
+            notPassword = item_param.get('password', True)
+            notBalance = item_param.get('balance', True)
+            if notName:
+                item_param['name'] = userInfo['name']
+            elif notEmail:
+                if userInfo.get('email', False):
+                    item_param['email'] = ''
+                else:
+                    item_param['email'] = userInfo['email']
+            elif notPassword:
+                item_param['password'] = userInfo['password']
+            elif notBalance:
+                item_param['balance'] = userInfo['balance']
+
+
             expression = self.create_update_expression(item_param)
             self.db_instance.client.update_item(
                 TableName=self.table_name,

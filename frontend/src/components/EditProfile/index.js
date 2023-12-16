@@ -16,7 +16,8 @@ function EditProfile() {
 
             const token = sessionStorage.getItem("assetsToken");
             const decodedToken = jwtDecode(token);
-            const user_id = decodedToken.sub;
+            console.log(decodedToken);
+            const user_id = decodedToken.id;
 
             fetch(`${apiUrl}/user/${user_id}/buy-credits`, {
                 method: 'POST',
@@ -28,18 +29,18 @@ function EditProfile() {
                 },
                 mode: "cors",
                 body: JSON.stringify({
-                    balance: balance
+                    credits_to_buy: balance
                 })
             })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    alert('Saldo alterado com sucesso!');
-                })
-                .catch(error => {
-                    console.log(error);
-                    alert('Erro ao alterar saldo!');
-                })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                alert('Saldo alterado com sucesso!');
+            })
+            .catch(error => {
+                console.log(error);
+                alert('Erro ao alterar saldo!');
+            })
         }
     }
 

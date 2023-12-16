@@ -42,6 +42,7 @@ class User_DAO(base_dao.BaseDAO):
             'id':{'S':item_id},
             'name':{'S':item_param.get('name','')},
             'purchased_asset_packs':{'SS':item_param.get('purchased_asset_packs', [''])},
+            'email':{'S':item_param.get('email','')},
             'password':{'S':item_param.get('password','')},
             'balance':{'N':item_param.get('balance','0.0')},
             'hash':{'B':password_fields['hash']},
@@ -65,7 +66,12 @@ class User_DAO(base_dao.BaseDAO):
         
         return {
             'name':item['name']['S'],
+            'email':item['email']['S'],
             'password': item['password']['S'],
+            'hashed': item['hashed']['B'],
+            'salt': item['salt']['B'],
+            'rounds': item['rounds']['N'],
+            'hash': item['hash']['B'], 
             'balance': item['balance']['N'],
             'purchased_asset_packs':item['purchased_asset_packs']['SS']
         }
@@ -76,12 +82,14 @@ class User_DAO(base_dao.BaseDAO):
     #Must return update expressions for update operations 
     def create_update_expression(self,item_param):
         expression = update_expression.UpdateExpression(
-            "SET #n = :new_name, #p = :new_password,#b = :new_purchased_asset_packs,#bl = :new_balance",
-            {"#n": "name", "#p": "password","#b":"purchased_asset_packs","#bl":"balance"},
+            "SET #n = :new_name, #p = :new_password,#b = :new_purchased_asset_packs,#bl = :new_balance,#e = :new_email",
+            {"#n": "name", "#p": "password","#b":"purchased_asset_packs","#bl":"balance","#e":"email"},
             {
                 ":new_name": {"S": item_param['name']},
                 ":new_password": {"S": item_param['password']},
                 ":new_balance":{"N": item_param['balance']},
+                ":new_email":{"S": item_param['email']},
+                ":new_hashed":{"B": item_param['hashed']},
                 ":new_purchased_asset_packs":{"SS":item_param.get('purchased_asset_packs', [''])}
             }
         )
@@ -114,13 +122,16 @@ class User_DAO(base_dao.BaseDAO):
                     'rounds': user['rounds']['N'],
                     'hashed': user['hashed']['B'],
                 }
+                userAssetPacks = user['purchased_asset_packs']['SS']
                 hashed = self.encode_password(password, password_fields['salt'])
                 if hashed['hashed'] == password_fields['hashed']:
                     now = datetime.datetime.utcnow()
                     unique_id = str(uuid.uuid4())
                     payload = {
                         'sub': username,
+                        'id': id,
                         'iat': now,
+                        'buyed_asset_packs': userAssetPacks,
                         'nbf': now,
                         'jti': unique_id,
                     }
