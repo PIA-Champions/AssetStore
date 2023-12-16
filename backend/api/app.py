@@ -4,7 +4,8 @@ from chalicelib.controllers import purchase_controller
 from chalicelib.definitions import database_defs
 cors_config = CORSConfig(
     allow_origin='*',
-    allow_headers=['Content-Type', 'X-Amz-Date', 'Authorization', 'X-Api-Key', 'X-Amz-Security-Token', 'Authorization'],
+    allow_headers=['Content-Type', 'X-Amz-Date', 'X-Api-Key', 'X-Amz-Security-Token', 'Authorization', 'Accept'],
+    expose_headers=['Content-Type', 'X-Amz-Date', 'X-Api-Key', 'X-Amz-Security-Token', 'Authorization', 'Accept'],
     max_age=600,
     allow_credentials=True
 )
@@ -89,31 +90,50 @@ def get_asset():
     
     return {'Bem vindo a aplicação': 'GameAssetsStore'}
 
+"""
+@app.route('/assets/{asset_id}/purchase', methods=['OPTIONS'])
+def purchase_options(asset_id):
 
+    return {'Response': 'Ok'}
+"""
 @app.route('/asset/{asset_id}/purchase', methods=['POST'], authorizer=jwt_auth, cors=cors_config)
 def buy_assets(asset_id):
-
     userdao = user_dao.User_DAO(TABLE_USER_NAME)
     userId = userdao.create_item_id({ "name": app.current_request.context['authorizer']['principalId']})
     purchase = purchase_controller.Purchase_Controller()
     response = purchase.purchase_asset_pack(userId, asset_id)
+    if response == 'ITEM_ALREADY_PURCHASED':
+        raise BadRequestError('Item already purchased')
+    if response == 'NOT_ENOUGH_BALANCE_FOR_PURCHASE':
+        raise BadRequestError('Not enough balance for purchase')
     return {'Response': response}
 
 @app.route('/user/{user_id}/buy-credits', methods=['POST'], cors=cors_config, authorizer=jwt_auth)
 def buy_credits(user_id):
-    
     body = app.current_request.json_body
     coins_to_buy = body.get('credits_to_buy', 0)
     purchase = purchase_controller.Purchase_Controller()
     response = purchase.purchase_credits(user_id,coins_to_buy)
     return {'Response': response}
 
-@app.route('/user/{user_id}', methods=['GET'], cors=cors_config)
+@app.route('/user/{user_id}', methods=['GET'], cors=cors_config, authorizer=jwt_auth)
 def get_user(user_id):
     userdao = user_dao.User_DAO(TABLE_USER_NAME)
     response = userdao.read_item(user_id)
-    del response['password']
-    return {'Response': response}
+    customResponse = {
+        "name": response['name'],
+        "email": response['email'],
+        "balance": response['balance'],
+        "purchased_asset_packs": response['purchased_asset_packs']
+    }
+    return {'Response': customResponse}
+
+
+@app.route('/user/{user_id}/assets', methods=['GET'], cors=cors_config, authorizer=jwt_auth)
+def get_user(user_id):
+    userdao = user_dao.User_DAO(TABLE_USER_NAME)
+    response = userdao.read_item(user_id)
+    return {'Response': response['purchased_asset_packs']}
 
 @app.route('/user/{user_id}', methods=['PUT'], cors=cors_config, authorizer=jwt_auth)
 def update_user(user_id):
