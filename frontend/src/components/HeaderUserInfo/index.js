@@ -1,4 +1,4 @@
-// HeaderUserInfo.js
+import styles from "../HeaderUserInfo/HeaderUserInfo.module.css";
 import React, { useEffect, useState } from 'react';
 import { getUserInfo } from '../../UserService'; // Ajuste o caminho conforme necessário
 
@@ -35,7 +35,7 @@ function UserInfoContent({ userInfo }) {
   }
 
   return (
-    <div>
+    <div className={styles.user_status}>
       {userName}
     </div>
   );

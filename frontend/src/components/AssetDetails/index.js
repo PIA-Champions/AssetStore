@@ -8,12 +8,12 @@ export function AssetDetails(param) {
     return (
         <div className={styles.card_container}>
             <h1 id="title-assets">{param.title}</h1>
-            <figure className={styles.image_container}>
-                <img className={styles.image_card} src={param.thumb_url}/>
+            <figure className={styles.image_container} loading="lazy">
+                <img className={styles.image_card} src={param.thumb_url} loading="lazy"/>
             </figure>
             <h3 id="description-assets">{param.description}</h3>
             <h2 id="price-assets">{param.price} coins</h2>
-            <button className="btn_assets">{buttonText}</button>
+            <button className={styles.btn_assets}>{buttonText}</button>
         </div>
     );
 }

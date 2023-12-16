@@ -1,0 +1,46 @@
+.list_container h2.title_assets {
+    font-family: var(--font);
+    font-weight: 700;
+    padding: 50px;
+    color: var(--roxo-escuro);
+    margin: auto;
+}
+
+.list_container ul {
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+}
+
+.list_container li {
+    list-style-type: none;  
+}
+
+.list_container span {
+    font-size: 20px;
+    color: var(--roxo);
+}
+
+.list_container span:hover,
+.list_container span:focus {
+    font-size: 35px;
+    color: var(--roxo-claro);
+}
+
+
+/*>>> DESKTOP <<<*/
+@media only screen and (min-width: 1280px) {
+    .list_container h2.title_assets {
+        padding: 3em 0 0 3em;
+    }
+
+    .list_container ul {
+        width: 100vw;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+    }
+}
