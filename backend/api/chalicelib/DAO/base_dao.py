@@ -1,5 +1,6 @@
 from chalicelib.database_client import dynamo
 from chalicelib.definitions import return_values
+import boto3
 
 
 from chalicelib.util import data_util
@@ -198,10 +199,10 @@ class BaseDAO:
     def update_item(self,item_id,item_param):
         if not dynamo.check_table_existence(self.table_name):
             return return_values.TABLE_NOT_FOUND
-        """
+        
         if not self.validate_item(item_param) or not item_id:
             return return_values.INVALID_INPUT_DATA
-        """
+        
         try:
             userInfo = self.read_item(item_id)
             notEmail =  item_param.get('email', True)
@@ -220,15 +221,17 @@ class BaseDAO:
             elif notBalance:
                 item_param['balance'] = userInfo['balance']
 
-
             expression = self.create_update_expression(item_param)
-            self.db_instance.client.update_item(
+            
+            response = self.db_instance.client.update_item(
                 TableName=self.table_name,
                 Key={"id": {"S": item_id}},
                 UpdateExpression=expression.expression,
                 ExpressionAttributeNames=expression.attribute_names,
                 ExpressionAttributeValues=expression.attribute_values,
             )
+            
+
             if self.wait_item_status(item_id):
                 return return_values.SUCCESS
             else:

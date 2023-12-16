@@ -22,6 +22,7 @@ class Purchase_Controller:
     #   ITEM_NOT_FOUD: USER
     #   ITEM_NOT_FOUND: ASSET_PACK
     def purchase_asset_pack(self,user_id,asset_pack_id):
+
         
         user_data = self._u_dao.read_item(user_id)
         if not self._u_dao.validate_item(user_data):
@@ -29,6 +30,7 @@ class Purchase_Controller:
         
         purchased_asset_packs = user_data.get('purchased_asset_packs',[])
         
+
         for purchased in purchased_asset_packs:
             if purchased == asset_pack_id:
                 return return_values.ITEM_ALREADY_PURCHASED
@@ -67,7 +69,6 @@ class Purchase_Controller:
         current_balance = float(user_data['balance'])
         user_data['balance'] = str(current_balance + converted_credits)
         
-
         self._u_dao.update_item(user_id,user_data)    
         return return_values.SUCCESS
     

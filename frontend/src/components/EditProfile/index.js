@@ -16,7 +16,6 @@ function EditProfile() {
 
             const token = sessionStorage.getItem("assetsToken");
             const decodedToken = jwtDecode(token);
-            console.log(decodedToken);
             const user_id = decodedToken.id;
 
             fetch(`${apiUrl}/user/${user_id}/buy-credits`, {

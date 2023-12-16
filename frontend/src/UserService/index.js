@@ -5,10 +5,16 @@
 import { apiUrl } from '../ApiConfig/apiConfig.js';
 
 export async function getUserInfo(userId) {
+  const token = sessionStorage.getItem("assetsToken");
   try {
     const response = await fetch(`${apiUrl}/user/${userId}`, {
-      method: 'GET',
-      mode: 'cors',
+      headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `${token}`
+      },
+      mode: "cors",
+      method: 'GET'
     });
 
     if (!response.ok) {
