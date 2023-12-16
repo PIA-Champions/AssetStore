@@ -1,0 +1,74 @@
+/*>>> MOBILE <<<*/
+.my_header h1,
+.my_header a {
+    padding-left: 50px;
+}
+
+.my_card_container {
+    background-color: var(--roxo);
+    width: 270px;
+    height: 500px;
+    padding: 10px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.my_card_container, .my_card_container h1 {
+    color: var(--branco-polar);
+}
+
+.my_card_container h3 {
+    width: 240px;
+    height: 80px;
+    align-items: center;
+    justify-content: center;
+}
+
+figure.my_image_container {
+    width: 240px;
+    height: 190px;
+    background-size: 100%;
+    border-radius: 12px;
+}
+
+.my_image_container .my_image_card {
+    width: 240px;
+    height: 190px;
+    border-radius: 12px;
+}
+
+button.my_btn_assets {
+    width: 240px;
+    color: var(--branco-polar);
+}
+
+button.my_btn_assets:hover {
+    color: var(--roxo-escuro);
+}
+
+/*>>> DESKTOP <<<*/
+@media only screen and (min-width: 1280px) {
+    .my_card_container {
+        margin: 50px;
+    }
+
+    .my_card_container, .my_card_container h1 {
+        color: var(--branco-polar);
+    }
+    
+    .my_card_container h3 {
+        width: 240px;
+        height: 80px;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    figure.my_image_container {
+        width: 240px;
+        height: 190px;
+        background-size: 100%;
+        border-radius: 12px;
+    }
+}
