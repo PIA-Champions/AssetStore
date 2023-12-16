@@ -29,7 +29,7 @@
     }
     
     .header_container nav {
-        width: 600px;
+        width: 670px;
         margin-left: auto;
         margin-right: auto;
     }
@@ -38,7 +38,7 @@
 /* >>> DESKTOP <<< */
 @media only screen and (min-width: 1280px) {   
     nav {
-        width: 700px;
+        width: 730px;
     }
     
     .header_container {

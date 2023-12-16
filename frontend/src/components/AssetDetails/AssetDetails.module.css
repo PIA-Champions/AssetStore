@@ -1,7 +1,7 @@
 /*>>> MOBILE <<<*/
 .card_container {
     background-color: var(--roxo);
-    width: 300px;
+    width: 270px;
     height: 555px;
     padding: 10px;
     border-radius: 12px;
@@ -35,8 +35,8 @@ figure.image_container {
 }
 
 button.btn_assets {
-    color: red;
-    width: 500px;
+    width: 240px;
+    color: var(--branco-polar)
 }
 
 /*>>> DESKTOP <<<*/
@@ -61,10 +61,5 @@ button.btn_assets {
         height: 190px;
         background-size: 100%;
         border-radius: 12px;
-    }
-    
-    button.btn_assets {
-        color: red;
-        width: 500px;
     }
 }
