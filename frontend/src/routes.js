@@ -4,6 +4,7 @@ import Cadastro from "./pages/cadastro";
 import Login from "./pages/login";
 import Assets from "./pages/assets";
 import Editar from "./pages/editar";
+import MyAssets from "./pages/meusasset";
 
 function AppRoutes() {
     return (
@@ -14,6 +15,7 @@ function AppRoutes() {
             <Route path="/cadastro" element={<Cadastro/>}></Route>
             <Route path="/login" element={<Login/>}></Route>
             <Route path="/editar" element={<Editar/>}></Route>
+            <Route path="/meuasset" element={<MyAssets/>}></Route>
         </Routes>
         </BrowserRouter>
     )
