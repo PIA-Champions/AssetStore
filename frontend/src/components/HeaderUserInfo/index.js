@@ -1,42 +1,20 @@
 import styles from "../HeaderUserInfo/HeaderUserInfo.module.css";
-import React, { useEffect, useState } from 'react';
-import { getUserInfo } from '../../UserService'; // Ajuste o caminho conforme necessário
+import { jwtDecode } from "jwt-decode";
 
 export default function HeaderUserInfo() {
-  const userId = sessionStorage.getItem("logged_user_id");
-  const [userInfo, setUserInfo] = useState(null);
-  
-  useEffect(() => {
-    if (userId) {
-      async function fetchUserInfo() {
-        try {
-          const userInformation = await getUserInfo(userId);
-          setUserInfo(userInformation);
-          } catch (error) {
-          console.error(error);
-          }
-      }
+  const token = sessionStorage.getItem("assetsToken");
 
-      fetchUserInfo();
-    }
-  }, [userId]);
-
-  return (
-            <UserInfoContent userInfo={userInfo} />
-  );
-}
-
-function UserInfoContent({ userInfo }) {
-  // Render user information based on userInfo
-  let userName = "User not logged"
-  
-  if(userInfo){
-    userName = userInfo.name;
+  if (token === null) {
+    var userName = 'User not logged';
+  }
+  else {
+    const decoded = jwtDecode(token);
+    var userName = decoded.sub;
   }
 
   return (
-    <div className={styles.user_status}>
-      {userName}
-    </div>
+          <div className={styles.user_status}>
+            {userName}
+          </div>
   );
 }
